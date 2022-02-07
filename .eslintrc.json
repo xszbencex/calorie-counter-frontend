@@ -1,0 +1,46 @@
+{
+  "extends": ["next/core-web-vitals", "next", "eslint:recommended"],
+  "rules": {
+    "max-len": [
+      "error",
+      140
+    ],
+    "no-console": "error",
+    "space-before-function-paren": [
+      "warn",
+      {
+        "anonymous": "never",
+        "asyncArrow": "always",
+        "named": "never"
+      }
+    ],
+    "arrow-spacing": "warn",
+    "no-extra-semi": "error",
+    "prefer-const": "warn",
+    "comma-spacing": ["warn",
+      {
+        "before": false,
+        "after": true
+      }],
+    "func-call-spacing": ["warn", "never"],
+    "jsx-quotes": ["warn", "prefer-double"],
+    "quotes": ["warn", "single",
+      {
+        "avoidEscape": true,
+        "allowTemplateLiterals": true
+      }],
+    "semi": ["warn", "always"],
+    "no-multi-spaces": "warn",
+    "no-trailing-spaces": "warn",
+    "no-whitespace-before-property": "warn",
+    "no-unused-vars": ["warn",
+      {
+        "args": "none",
+        "caughtErrors": "none"
+      }],
+    "@next/next/no-document-import-in-page": "off"
+  },
+  "globals": {
+    "JSX": true
+  }
+}
