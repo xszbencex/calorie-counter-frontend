@@ -1,0 +1,33 @@
+.fixed {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.headerContainer {
+    background-color: var(--main-dark);
+    text-transform: uppercase;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    height: var(--header-height);
+}
+
+.profile {
+    margin-right: 5px;
+    height: 80%;
+    display: flex;
+}
+
+.logo {
+    cursor: pointer;
+}
+
+.profileMenu {
+    color: white !important;
+    text-transform: none !important;
+}

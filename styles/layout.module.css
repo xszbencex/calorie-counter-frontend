@@ -1,0 +1,9 @@
+.mainContainer {
+    margin-top: var(--header-height);
+    margin-bottom: 30px;
+    padding: 20px 20px 0;
+    width: 100%;
+}
+
+.pageContainer {
+}

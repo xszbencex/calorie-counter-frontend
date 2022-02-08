@@ -1,12 +1,7 @@
-import type { NextPage } from 'next';
-import styles from '../styles/Home.module.css';
-
-const Home: NextPage = () => {
+export default function HomePage() {
   return (
-    <div className={styles.container}>
+    <div>
 
     </div>
   );
-};
-
-export default Home;
+}
