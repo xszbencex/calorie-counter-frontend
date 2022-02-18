@@ -7,7 +7,7 @@ export type CCRoute = {
 
 export const routes: CCRoute[] = [
   {path: '/', label: 'Kezdőlap', icon: 'home'},
-  {path: '/company', label: 'Cégek', icon: 'business'},
+  {path: '/profile', label: 'Cégek', icon: 'business'},
   {path: '/student', label: 'Hallgatók', icon: 'person'},
   {path: '/student-documents', label: 'Hallgatói dokumentumok', icon: 'snippet_folder'},
   {path: '/training-location', label: 'Képzési helyek', icon: 'add_location_alt'},

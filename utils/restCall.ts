@@ -1,3 +1,6 @@
+import {getKeycloakInstance} from '@react-keycloak/ssr';
+import {keycloakConfig} from '../constants/keycloakConfig';
+
 type CallMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
 type HttpOptions = {
@@ -37,12 +40,15 @@ export const restCall = (
   method: CallMethod,
   options: HttpOptions = {}
 ) => {
+  const keycloakInstance = getKeycloakInstance(keycloakConfig);
+
   const {headers = {}, params = null, requestBody = null} = options;
 
   const requestUrl = !params ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`
-    : `${process.env.rootUrl}${url}?` + new URLSearchParams(params);
+    : `${process.env.NEXT_PUBLIC_BACKEND_URL}${url}?` + new URLSearchParams(params);
 
   const headerObject = new Headers({'Content-Type': 'application/json', ...headers});
+  keycloakInstance.token && headerObject.append('authorization', `Bearer ${keycloakInstance.token}`);
 
   return fetch(requestUrl,
     {
