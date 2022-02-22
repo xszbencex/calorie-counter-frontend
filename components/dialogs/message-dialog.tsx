@@ -1,5 +1,5 @@
-import {DialogProps} from '../types/DialogProps';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Icon, IconButton} from '@mui/material';
+import {DialogProps} from '../../types/DialogProps';
 
 export const MessageDialog = (props: DialogProps) => {
   const {onClose, open, data} = props;

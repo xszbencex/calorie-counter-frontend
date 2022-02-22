@@ -38,7 +38,8 @@ type Result = {
 export const restCall = (
   url: string,
   method: CallMethod,
-  options: HttpOptions = {}
+  options: HttpOptions = {},
+  responseType: 'json' | 'blob' | 'arraybuffer' = 'json'
 ) => {
   const keycloakInstance = getKeycloakInstance(keycloakConfig);
 
@@ -54,15 +55,25 @@ export const restCall = (
     {
       headers: headerObject,
       method: method,
-      body: requestBody ? JSON.stringify(requestBody) : null
+      body: requestBody ? JSON.stringify(requestBody) : null,
     })
     .then(response => {
       if (response.ok) {
-        return response.json();
+        switch (responseType) {
+          case 'json':
+            return response.json();
+          case 'blob':
+            return response.blob();
+          case 'arraybuffer':
+            return response.arrayBuffer();
+        }
       } else {
         throw new CCHTTPError(response.status, response.statusText);
       }})
-    .then((result: Result) => {
+    .then((result: Result | Blob | ArrayBuffer) => {
+      if (result instanceof Blob || result instanceof ArrayBuffer) {
+        return result;
+      }
       if (result.errors?.length > 0) {
         return Promise.reject(result.errors[0]);
       }

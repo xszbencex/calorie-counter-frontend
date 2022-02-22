@@ -13,7 +13,7 @@ import {huHU} from '@mui/material/locale';
 import {LocalizationProvider} from '@mui/lab';
 import {Layout} from '../components/layout/layout';
 import {SSRCookies, SSRKeycloakProvider} from '@react-keycloak/ssr';
-import {PageLoading} from '../components/page-loading';
+import {PageLoading} from '../components/layout/page-loading';
 import {keycloakConfig} from '../constants/keycloakConfig';
 import {IncomingMessage} from 'http';
 

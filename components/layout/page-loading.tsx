@@ -1,4 +1,4 @@
-import styles from '../styles/page-loading.module.css';
+import styles from '../../styles/page-loading.module.css';
 import {useEffect} from 'react';
 
 export const PageLoading = () => {
