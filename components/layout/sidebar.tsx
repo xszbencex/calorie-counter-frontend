@@ -4,7 +4,6 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import {ReactElement, useContext, useEffect, useState} from 'react';
 import DrawerContext from '../../store/drawer-context';
-import styles from '../../styles/sidebar.module.css';
 import {Box, CSSObject} from '@mui/material';
 import Icon from '@mui/material/Icon';
 import {mainDark} from '../../constants/colors';
@@ -112,7 +111,10 @@ export default function Sidebar(props: { children: ReactElement }) {
         <DrawerHeader>
           {open ? (
            <>
-             <span className={styles.menuText}>
+             <span style={{
+               fontFamily: 'Roboto, Helvetica, Arial ,sans-serif',
+               paddingLeft: '8px'
+             }}>
               Menü
              </span>
              <IconButton onClick={() => closeSidebar()}>

@@ -1,8 +1,13 @@
-import {createContext, ReactNode, useState} from 'react';
+import {createContext, ReactNode, useEffect, useState} from 'react';
 import {Alert, Button, Snackbar} from '@mui/material';
 import {CCApplicationError, CCHTTPError} from '../utils/restCall';
 import {MessageDialog} from '../components/dialogs/message-dialog';
 import {FormDialog, FormDialogData} from '../components/dialogs/form-dialog';
+import {ClientDTO} from '../types/dto/ClientDTO';
+import {useKeycloak} from '@react-keycloak/ssr';
+import {KeycloakInstance} from 'keycloak-js';
+import {getClientByUserId} from '../utils/api/client-api';
+import {useRouter} from 'next/router';
 
 type MessageDialogProps = {
   title: string;
@@ -15,7 +20,20 @@ type SnackbarProps = {
   type: 'error' | 'warning' | 'info' | 'success';
 }
 
-const GlobalContext = createContext({
+type GlobalContextType = {
+  showMessageDialog: (title: string, content: ReactNode | string) => void;
+  showAlertDialog: (title: string, errorMessage: string) => void,
+  showConfirmationDialog: (message: string, onConfirm: () => void, onCancel?: () => void, confirmButtonText?: string) => void,
+  showRestCallErrorDialog: (error: CCHTTPError | CCApplicationError) => void,
+  openFormDialog: (formDialogData: FormDialogData) => void,
+  closeFormDialog: () => void,
+  showSnackbar: (message: string, type: 'error' | 'warning' | 'info' | 'success') => void,
+  setClient: (client: ClientDTO) => void
+  client?: ClientDTO,
+  loggedInUserId?: string,
+}
+
+const GlobalContext = createContext<GlobalContextType>({
   showMessageDialog: (title: string, content: ReactNode | string) => {},
   showAlertDialog: (title: string, errorMessage: string) => {},
   showConfirmationDialog: (message: string, onConfirm: () => void, onCancel?: () => void, confirmButtonText?: string) => {},
@@ -23,12 +41,28 @@ const GlobalContext = createContext({
   openFormDialog: (formDialogData: FormDialogData) => {},
   closeFormDialog: () => {},
   showSnackbar: (message: string, type: 'error' | 'warning' | 'info' | 'success') => {},
+  setClient: (client: ClientDTO) => {}
 });
 
 export function GlobalContextProvider(props: { children: ReactNode }) {
+  const {keycloak} = useKeycloak<KeycloakInstance>();
+  const router = useRouter();
   const [messageDialogData, setMessageDialogData] = useState<MessageDialogProps | null>(null);
   const [formDialogData, setFormDialogData] = useState<FormDialogData | null>(null);
   const [snackbarData, setSnackbarData] = useState<SnackbarProps | null>(null);
+  const [client, setClient] = useState<ClientDTO>();
+  const [loggedInUserId, setLoggedInUserId] = useState<string>('');
+
+  useEffect(() => {
+    if (keycloak?.authenticated) {
+      setLoggedInUserId(keycloak?.subject!);
+      getClientByUserId(keycloak?.subject!)
+        .then(response => setClient(response))
+        .catch(error => {
+          error.code === '201' ? router.push('/profile') : showRestCallErrorDialog(error);
+        });
+    }
+  }, [keycloak]);
 
   function showMessageDialog(title: string, content: ReactNode | string) {
     setMessageDialogData({
@@ -103,6 +137,9 @@ export function GlobalContextProvider(props: { children: ReactNode }) {
     openFormDialog,
     closeFormDialog,
     showSnackbar,
+    setClient,
+    client,
+    loggedInUserId,
   };
 
   return (

@@ -32,6 +32,11 @@ a {
   align-items: center;
 }
 
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .MuiDataGrid-columnHeaderTitle {
   font-weight: 700 !important;
   white-space: break-spaces !important;

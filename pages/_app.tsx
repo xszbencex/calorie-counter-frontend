@@ -2,12 +2,12 @@ import '../styles/globals.css';
 import cookie from 'cookie';
 import type {AppContext, AppProps} from 'next/app';
 import Head from 'next/head';
-import {createTheme} from '@mui/material';
+import {createTheme, ThemeProvider} from '@mui/material';
 import {green, mainDark, mainLight} from '../constants/colors';
 import 'moment/locale/hu';
 import moment from 'moment';
 import DateAdapter from '@mui/lab/AdapterMoment';
-import {ThemeProvider} from '@mui/styles';
+
 import {GlobalContextProvider} from '../store/global-context';
 import {huHU} from '@mui/material/locale';
 import {LocalizationProvider} from '@mui/lab';
@@ -16,6 +16,7 @@ import {SSRCookies, SSRKeycloakProvider} from '@react-keycloak/ssr';
 import {PageLoading} from '../components/layout/page-loading';
 import {keycloakConfig} from '../constants/keycloakConfig';
 import {IncomingMessage} from 'http';
+import AuthGuard from '../components/AuthGuard';
 
 function MyApp({Component, pageProps, cookies}: AppProps & { cookies: unknown }) {
   const theme = createTheme(
@@ -74,9 +75,11 @@ function MyApp({Component, pageProps, cookies}: AppProps & { cookies: unknown })
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={DateAdapter} locale={moment.locale('hu')}>
           <GlobalContextProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <AuthGuard>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </AuthGuard>
           </GlobalContextProvider>
         </LocalizationProvider>
       </ThemeProvider>
