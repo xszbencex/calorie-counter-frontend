@@ -9,7 +9,7 @@ export type ProductDTO = BaseDTO & {
   carbohydrate: number;
   protein: number;
   fat: number;
-  kcal: number;
+  calorie: number;
   comment: string;
   userId: string;
 }

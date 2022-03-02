@@ -12,8 +12,8 @@ import {NutritionForm} from '../components/forms/nutrition-form';
 export default function NutritionPage() {
   const columns: GridColDef[] = [
     {
-      field: 'nutritionDate', headerName: 'Étkezés időpontja', flex: 1,
-      valueGetter: params => new Date(params.row.nutritionDate).toLocaleString()
+      field: 'nutritionDate', headerName: 'Étkezés napja', flex: 1,
+      valueGetter: params => new Date(params.row.nutritionDate).toLocaleDateString()
     },
     {
       field: 'carbohydrate', headerName: 'Szénhidrát', flex: 1,
@@ -28,8 +28,8 @@ export default function NutritionPage() {
       valueGetter: params => `${params.row.fat} g`
     },
     {
-      field: 'kcal', headerName: 'Kalória', flex: 1,
-      valueGetter: params => `${params.row.kcal} kcal`
+      field: 'calorie', headerName: 'Kalória', flex: 1,
+      valueGetter: params => `${params.row.calorie} kcal`
     },
     {
       field: 'action', headerName: 'Műveletek',

@@ -7,6 +7,9 @@ export type ClientDTO = BaseDTO & {
   height: number;
   weight: number;
   targetCalories: number;
+  targetCarbohydrate: number;
+  targetProtein: number;
+  targetFat: number;
   birthDate: Date;
   gender: Gender;
 }

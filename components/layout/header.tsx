@@ -4,13 +4,11 @@ import {Button} from '@mui/material';
 import React, {useContext, useEffect, useRef} from 'react';
 import DrawerContext from '../../store/drawer-context';
 import {useKeycloak} from '@react-keycloak/ssr';
-import {KeycloakInstance} from 'keycloak-js';
-import {ParsedToken} from '../../types/ParsedToken';
+import {CCKecyloakInstance} from '../../types/CCKecyloakInstance';
 
 export const Header = () => {
   const drawerContext = useContext(DrawerContext);
-  const {keycloak} = useKeycloak<KeycloakInstance>();
-  const parsedToken: ParsedToken | undefined = keycloak?.tokenParsed;
+  const {keycloak} = useKeycloak<CCKecyloakInstance>();
   const headerRef = useRef<HTMLDivElement>(null);
 
   const logout = () => {
@@ -46,7 +44,7 @@ export const Header = () => {
           <div className={styles.profile}>
             {keycloak?.authenticated ? (
               <>
-                {`${parsedToken?.family_name} ${parsedToken?.given_name}`}
+                {`${keycloak.tokenParsed?.family_name} ${keycloak.tokenParsed?.given_name}`}
                 <Button onClick={() => logout()}>Kilépés</Button>
               </>
             ): (

@@ -10,18 +10,19 @@ import { CCSelect } from '../input-fields/CCSelect';
 import {productTypeOptions, unitOfMeasureOptions} from '../../constants/enum-labels';
 import {ProductDTO} from '../../types/dto/ProductDTO';
 import {useEffect, useState} from 'react';
+import {getNumberSchema} from '../../constants/common-schema';
 
 type FormData = Omit<ProductDTO, keyof BaseDTO>
 
 const schema = yup.object({
   name: yup.string().required(commonStrings.required),
-  carbohydrate: yup.number().required(commonStrings.required).min(0, commonStrings.zeroToHundred).max(100, commonStrings.zeroToHundred),
-  protein: yup.number().required(commonStrings.required).min(0, commonStrings.zeroToHundred).max(100, commonStrings.zeroToHundred),
-  fat: yup.number().required(commonStrings.required).min(0, commonStrings.zeroToHundred).max(100, commonStrings.zeroToHundred),
-  kcal: yup.number().required(commonStrings.required).min(0, commonStrings.zeroToTenThousand).max(10000, commonStrings.zeroToTenThousand),
+  carbohydrate: getNumberSchema(0, 100).required(commonStrings.required),
+  protein: getNumberSchema(0, 100).required(commonStrings.required),
+  fat: getNumberSchema(0, 100).required(commonStrings.required),
+  calorie: getNumberSchema(0, 10000).required(commonStrings.required),
   productType: yup.string().required(commonStrings.required),
   unitOfMeasure: yup.string().required(commonStrings.required),
-  comment: yup.string().required(commonStrings.required),
+  comment: yup.string(),
 });
 
 export const ProductForm = (props: FormProps) => {
@@ -98,7 +99,7 @@ export const ProductForm = (props: FormProps) => {
           </Grid>
           <Grid item xs={2}>
             <CCText
-              name="kcal"
+              name="calorie"
               control={control}
               label="Kalória *"
               textFieldProps={{

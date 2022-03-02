@@ -29,9 +29,9 @@ export default function UsersPage() {
         `${params.row.fat} g${unitOfMeasureOptions.find(value => value.value === params.row.unitOfMeasure)?.label}`
     },
     {
-      field: 'kcal', headerName: 'Kalória', flex: 1,
+      field: 'calorie', headerName: 'Kalória', flex: 1,
       valueGetter: params =>
-        `${params.row.kcal} kcal${unitOfMeasureOptions.find(value => value.value === params.row.unitOfMeasure)?.label}`
+        `${params.row.calorie} kcal${unitOfMeasureOptions.find(value => value.value === params.row.unitOfMeasure)?.label}`
     },
     {
       field: 'action', headerName: 'Műveletek',

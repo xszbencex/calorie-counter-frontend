@@ -10,24 +10,45 @@ import {CCText} from '../input-fields/CCText';
 import { CCSelect } from '../input-fields/CCSelect';
 import {genderOptions} from '../../constants/enum-labels';
 import {CCDate} from '../input-fields/CCDate';
+import {useKeycloak} from '@react-keycloak/ssr';
+import {CCKecyloakInstance} from '../../types/CCKecyloakInstance';
+import {useContext, useEffect} from 'react';
+import {getNumberSchema} from '../../constants/common-schema';
+import GlobalContext from '../../store/global-context';
 
 type FormData = Omit<ClientDTO, keyof BaseDTO | 'keycloakId'>
 
 const schema = yup.object({
   name: yup.string().required(commonStrings.required),
-  height: yup.number().required(commonStrings.required).min(0, commonStrings.invalidNumber).max(500, commonStrings.invalidNumber),
-  weight: yup.number().required(commonStrings.required).min(0, commonStrings.invalidNumber).max(1000, commonStrings.invalidNumber),
-  targetCalories: yup.number().required(commonStrings.required),
-  birthDate: yup.date().required(),
+  height: getNumberSchema(1, 500).required(commonStrings.required),
+  weight: getNumberSchema(1, 1000).required(commonStrings.required),
+  targetCalories: getNumberSchema(0, 10000).required(commonStrings.required),
+  targetCarbohydrate: getNumberSchema(0, 10000),
+  targetProtein: getNumberSchema(0, 10000),
+  targetFat: getNumberSchema(0, 10000),
+  birthDate: yup.date().required(commonStrings.required),
   gender: yup.string().required(commonStrings.required),
 });
 
 export const ClientForm = (props: FormProps) => {
-  const {data, onFormSubmit} = props;
-  const isUpdate = !!data;
+  const {onFormSubmit} = props;
+  const {keycloak} = useKeycloak<CCKecyloakInstance>();
+  const globalContext = useContext(GlobalContext);
 
-  const methods = useForm<FormData>({defaultValues: isUpdate ? {...data} : undefined, resolver: yupResolver(schema)});
-  const {handleSubmit, control} = methods;
+  useEffect(() => {
+    if (globalContext.client) {
+      reset(globalContext.client);
+    }
+  }, [globalContext.client]);
+
+  useEffect(() => {
+    if (keycloak?.tokenParsed) {
+      setValue('name', `${keycloak?.tokenParsed.family_name} ${keycloak?.tokenParsed.given_name}`);
+    }
+  }, [keycloak]);
+
+  const methods = useForm<FormData>({defaultValues: undefined, resolver: yupResolver(schema)});
+  const {handleSubmit, control, setValue, reset} = methods;
 
   const onSubmit = (formData: FormData) => {
     if (onFormSubmit) {
@@ -73,13 +94,52 @@ export const ClientForm = (props: FormProps) => {
           </Grid>
           <Grid item xs={2}>
             <CCText
-              name="weight"
+              name="targetCalories"
               control={control}
               label="Napi cél kalória *"
               textFieldProps={{
                 type: 'number',
                 InputProps: {
                   endAdornment: <InputAdornment position="end">kcal</InputAdornment>,
+                }
+              }}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <CCText
+              name="targetCarbohydrate"
+              control={control}
+              label="Napi cél szénhidrát"
+              textFieldProps={{
+                type: 'number',
+                InputProps: {
+                  endAdornment: <InputAdornment position="end">g</InputAdornment>,
+                }
+              }}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <CCText
+              name="targetProtein"
+              control={control}
+              label="Napi cél fehérje"
+              textFieldProps={{
+                type: 'number',
+                InputProps: {
+                  endAdornment: <InputAdornment position="end">g</InputAdornment>,
+                }
+              }}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <CCText
+              name="targetFat"
+              control={control}
+              label="Napi cél zsír"
+              textFieldProps={{
+                type: 'number',
+                InputProps: {
+                  endAdornment: <InputAdornment position="end">g</InputAdornment>,
                 }
               }}
             />

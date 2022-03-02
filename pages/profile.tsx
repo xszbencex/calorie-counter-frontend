@@ -22,7 +22,7 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <ClientForm data={globalContext.client} onFormSubmit={onSubmit}/>
+      <ClientForm onFormSubmit={onSubmit}/>
       <Button type="submit" form="client-form">Mentés</Button>
     </div>
   );

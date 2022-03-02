@@ -1,5 +1,6 @@
 import {restCall} from '../restCall';
 import {NutritionDTO} from '../../types/dto/NutritionDTO';
+import {NutritionSumResponse} from '../../types/response/NutritionSumResponse';
 
 const rootUrl = '/nutrition';
 
@@ -15,6 +16,11 @@ export async function getAllNutritionByUserId(userId: string): Promise<Nutrition
 
 export async function getNutritionById(id: string): Promise<NutritionDTO> {
   const url = `${rootUrl}/${id}`;
+  return await restCall(url, 'GET');
+}
+
+export async function getNutritionSumByDate(nutritionDate: string): Promise<NutritionSumResponse> {
+  const url = `${rootUrl}/sum/${nutritionDate}`;
   return await restCall(url, 'GET');
 }
 
