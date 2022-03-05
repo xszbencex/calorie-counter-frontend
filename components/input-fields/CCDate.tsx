@@ -18,7 +18,7 @@ export const CCDate = (
         <>
           <DatePicker
             {...datePickerProps}
-            value={value === undefined ? null : value}
+            value={value === undefined || value === '' ? null : value}
             onChange={newValue => {
               onChange(newValue);
               if (onValueChanged) {

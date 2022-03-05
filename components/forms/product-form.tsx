@@ -11,15 +11,26 @@ import {productTypeOptions, unitOfMeasureOptions} from '../../constants/enum-lab
 import {ProductDTO} from '../../types/dto/ProductDTO';
 import {useEffect, useState} from 'react';
 import {getNumberSchema} from '../../constants/common-schema';
+import {UnitOfMeasure} from '../../types/enum/UnitOfMeasure';
 
 type FormData = Omit<ProductDTO, keyof BaseDTO>
 
+const macroSchema = yup.number()
+  .min(0, commonStrings.positiveError)
+  .transform((value, originalValue) => originalValue === '' ? null : value).nullable()
+  .when('unitOfMeasure', {
+    is: UnitOfMeasure.PIECE,
+    then: schema => schema.max(10000, commonStrings.oneHundred),
+    otherwise: schema => schema.max(100, commonStrings.oneHundred)
+  })
+  .required(commonStrings.required);
+
 const schema = yup.object({
   name: yup.string().required(commonStrings.required),
-  carbohydrate: getNumberSchema(0, 100).required(commonStrings.required),
-  protein: getNumberSchema(0, 100).required(commonStrings.required),
-  fat: getNumberSchema(0, 100).required(commonStrings.required),
-  calorie: getNumberSchema(0, 10000).required(commonStrings.required),
+  carbohydrate: macroSchema,
+  protein: macroSchema,
+  fat: macroSchema,
+  calorie: getNumberSchema(0, 10000).integer(commonStrings.integerError).required(commonStrings.required),
   productType: yup.string().required(commonStrings.required),
   unitOfMeasure: yup.string().required(commonStrings.required),
   comment: yup.string(),

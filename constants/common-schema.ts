@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import {commonStrings} from './common-strings';
 
 export function getNumberSchema(min: number, max: number) {
   const numberRangeErrorMessage = `${min}-${max} közötti számot adjon meg`;
@@ -7,4 +8,8 @@ export function getNumberSchema(min: number, max: number) {
     .max(max, numberRangeErrorMessage)
     .transform((value, originalValue) => originalValue === '' ? null : value)
     .nullable();
+}
+
+export function getDateSchema() {
+  return yup.date().nullable().typeError(commonStrings.dateError);
 }

@@ -14,24 +14,23 @@ import {getAllProductByUserId} from '../../utils/api/product-api';
 import GlobalContext from '../../store/global-context';
 import {unitOfMeasureOptions} from '../../constants/enum-labels';
 import {UnitOfMeasure} from '../../types/enum/UnitOfMeasure';
-import moment from 'moment';
 import {CCDate} from '../input-fields/CCDate';
-import {getNumberSchema} from '../../constants/common-schema';
+import {getDateSchema, getNumberSchema} from '../../constants/common-schema';
 
 type FormData = Omit<NutritionDTO, keyof BaseDTO>
 
 const defaultFormValues = {
-  nutritionDate: moment().toDate()
+  nutritionDate: new Date()
 } as FormData;
 
 const schema = yup.object({
-  nutritionDate: yup.date().required(commonStrings.required),
+  nutritionDate: getDateSchema().required(commonStrings.required),
   carbohydrate: getNumberSchema(0, 10000).required(commonStrings.required),
   protein: getNumberSchema(0, 10000).required(commonStrings.required),
   fat: getNumberSchema(0, 10000).required(commonStrings.required),
-  calorie: getNumberSchema(0, 30000).required(commonStrings.required),
+  calorie: getNumberSchema(0, 30000).integer(commonStrings.integerError).required(commonStrings.required),
   product: yup.object().nullable(),
-  quantity: getNumberSchema(0, 10000),
+  quantity: getNumberSchema(0, 10000).integer(commonStrings.integerError),
   comment: yup.string().nullable(),
 });
 
@@ -61,11 +60,13 @@ export const NutritionForm = (props: FormProps) => {
   const quantity = watch('quantity');
 
   useEffect(() => {
-    if (product !== undefined && !isUpdate) {
-      if (quantity === undefined) {
-        setValue('quantity', 1);
+    if (product) {
+      if (!quantity) {
+        setValue('quantity', product.unitOfMeasure === UnitOfMeasure.PIECE ? 1 : 100);
       } else {
-        refreshNutrients();
+        if (!isUpdate) {
+          refreshNutrients();
+        }
       }
     }
   }, [product, quantity]);
@@ -103,23 +104,25 @@ export const NutritionForm = (props: FormProps) => {
               getOptionLabel={option => option.name}
             />
           </Grid>
-          <Grid item xs={1.5}>
-            <CCText
-              name="quantity"
-              control={control}
-              label="Mennyiség"
-              textFieldProps={{
-                type: 'number',
-                InputProps: {
-                  endAdornment: <InputAdornment position="end">
-                    {unitOfMeasureOptions.find(value => value.value === product?.unitOfMeasure)?.label2}
-                  </InputAdornment>,
-                },
-              }}
-            />
-          </Grid>
+          {product && (
+            <Grid item xs={1.5}>
+              <CCText
+                name="quantity"
+                control={control}
+                label="Mennyiség"
+                textFieldProps={{
+                  type: 'number',
+                  InputProps: {
+                    endAdornment: <InputAdornment position="end">
+                      {unitOfMeasureOptions.find(value => value.value === product?.unitOfMeasure)?.label2}
+                    </InputAdornment>,
+                  },
+                }}
+              />
+            </Grid>
+          )}
           <Grid item xs={2}>
-            {isUpdate && <Button onClick={() => refreshNutrients()}>Kiszámítás</Button>}
+            {isUpdate && product && quantity && <Button onClick={() => refreshNutrients()}>Kiszámítás</Button>}
           </Grid>
           <Grid item xs={2}>
             <CCText

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../../styles/header.module.css';
 import {Button} from '@mui/material';
@@ -5,6 +6,7 @@ import React, {useContext, useEffect, useRef} from 'react';
 import DrawerContext from '../../store/drawer-context';
 import {useKeycloak} from '@react-keycloak/ssr';
 import {CCKecyloakInstance} from '../../types/CCKecyloakInstance';
+import {mainDark} from '../../constants/colors';
 
 export const Header = () => {
   const drawerContext = useContext(DrawerContext);
@@ -32,11 +34,11 @@ export const Header = () => {
   return (
     <>
       <div className={styles.fixed} ref={headerRef}>
-        <div className={styles.headerContainer}>
+        <div className={styles.headerContainer} style={{backgroundColor: mainDark}}>
           <div className={styles.logo}>
             <Link href={'/'} passHref>
               <a>
-                Kezdőlap
+                <Image src={'/logo2 copy.png'} width={80} height={60} alt={'Logo'}/>
               </a>
             </Link>
           </div>

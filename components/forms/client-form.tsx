@@ -10,29 +10,25 @@ import {CCText} from '../input-fields/CCText';
 import { CCSelect } from '../input-fields/CCSelect';
 import {genderOptions} from '../../constants/enum-labels';
 import {CCDate} from '../input-fields/CCDate';
-import {useKeycloak} from '@react-keycloak/ssr';
-import {CCKecyloakInstance} from '../../types/CCKecyloakInstance';
 import {useContext, useEffect} from 'react';
-import {getNumberSchema} from '../../constants/common-schema';
+import {getDateSchema, getNumberSchema} from '../../constants/common-schema';
 import GlobalContext from '../../store/global-context';
 
 type FormData = Omit<ClientDTO, keyof BaseDTO | 'keycloakId'>
 
 const schema = yup.object({
-  name: yup.string().required(commonStrings.required),
-  height: getNumberSchema(1, 500).required(commonStrings.required),
+  height: getNumberSchema(1, 500).integer(commonStrings.integerError).required(commonStrings.required),
   weight: getNumberSchema(1, 1000).required(commonStrings.required),
-  targetCalories: getNumberSchema(0, 10000).required(commonStrings.required),
-  targetCarbohydrate: getNumberSchema(0, 10000),
-  targetProtein: getNumberSchema(0, 10000),
-  targetFat: getNumberSchema(0, 10000),
-  birthDate: yup.date().required(commonStrings.required),
+  targetCalories: getNumberSchema(0, 10000).integer(commonStrings.integerError).required(commonStrings.required),
+  targetCarbohydrate: getNumberSchema(0, 10000).integer(commonStrings.integerError),
+  targetProtein: getNumberSchema(0, 10000).integer(commonStrings.integerError),
+  targetFat: getNumberSchema(0, 10000).integer(commonStrings.integerError),
+  birthDate: getDateSchema().required(commonStrings.required),
   gender: yup.string().required(commonStrings.required),
 });
 
 export const ClientForm = (props: FormProps) => {
   const {onFormSubmit} = props;
-  const {keycloak} = useKeycloak<CCKecyloakInstance>();
   const globalContext = useContext(GlobalContext);
 
   useEffect(() => {
@@ -41,14 +37,8 @@ export const ClientForm = (props: FormProps) => {
     }
   }, [globalContext.client]);
 
-  useEffect(() => {
-    if (keycloak?.tokenParsed) {
-      setValue('name', `${keycloak?.tokenParsed.family_name} ${keycloak?.tokenParsed.given_name}`);
-    }
-  }, [keycloak]);
-
   const methods = useForm<FormData>({defaultValues: undefined, resolver: yupResolver(schema)});
-  const {handleSubmit, control, setValue, reset} = methods;
+  const {handleSubmit, control, reset} = methods;
 
   const onSubmit = (formData: FormData) => {
     if (onFormSubmit) {
@@ -60,9 +50,6 @@ export const ClientForm = (props: FormProps) => {
     <>
       <form id="client-form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container rowSpacing={2} columnSpacing={2} marginBottom="20px">
-          <Grid item xs={4}>
-            <CCText name="name" control={control} label="Név *"/>
-          </Grid>
           <Grid item xs={2}>
             <CCSelect name="gender" control={control} label="Neme *" options={genderOptions}/>
           </Grid>
@@ -145,7 +132,7 @@ export const ClientForm = (props: FormProps) => {
             />
           </Grid>
           <Grid item xs={3}>
-            <CCDate name="birthDate" control={control} label="Születési dátum"/>
+            <CCDate name="birthDate" control={control} label="Születési dátum *" isBirthDatePicker/>
           </Grid>
         </Grid>
       </form>

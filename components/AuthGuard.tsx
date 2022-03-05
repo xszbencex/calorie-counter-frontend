@@ -3,7 +3,6 @@ import {KeycloakInstance} from 'keycloak-js';
 import {useEffect, useState} from 'react';
 import { PageLoading } from './layout/page-loading';
 import {useRouter} from 'next/router';
-import {routes} from '../constants/routes';
 
 export default function AuthGuard(props: {children: JSX.Element}) {
   const {keycloak} = useKeycloak<KeycloakInstance>();
@@ -12,7 +11,7 @@ export default function AuthGuard(props: {children: JSX.Element}) {
 
   useEffect(() => {
     const handleRouteChange = (url: string) => {
-      if (!keycloak?.authenticated && !routes.find(value => value.path === url)?.isPublic) {
+      if (!keycloak?.authenticated && url !== '/') {
         router.events.emit('routeChangeError');
         router.push('/').then(() => setLoading(false));
         throw 'Protected route, this error is thrown on purpose';
@@ -21,7 +20,7 @@ export default function AuthGuard(props: {children: JSX.Element}) {
 
     router.events.on('routeChangeStart', handleRouteChange);
 
-    if (routes.find(value => value.path === router.route)?.isPublic) {
+    if (router.route === '/') {
       setLoading(false);
     } else {
       if (keycloak?.authenticated) {

@@ -23,7 +23,8 @@ function MyApp({Component, pageProps, cookies}: AppProps & { cookies: unknown })
     {
       palette: {
         primary: {
-          main: mainDark
+          main: mainDark,
+          contrastText: '#FFF'
         },
         secondary: {
           main: mainLight,
