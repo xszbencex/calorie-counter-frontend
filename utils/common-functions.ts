@@ -1,4 +1,7 @@
 import {Dispatch, SetStateAction} from 'react';
+import {Gender} from '../types/enum/Gender';
+import {PhysicalActivity} from '../types/enum/PhysicalActivity';
+import {physicalActivityOptions} from '../constants/enum-label';
 
 export function arraysEqual(a: any[], b: any[]) {
   if (a === b) return true;
@@ -39,4 +42,15 @@ export function constructMapFromJsonObject(object: any): Map<any, any> {
     map.set(key, object[key]);
   }
   return map;
+}
+
+export function calculateTargetCalories(weight: number, height: number, age: number, gender: Gender, physicalActivity: PhysicalActivity) {
+  const BMR = 10 * weight + 6.25 * height - 5 * age + (gender === Gender.MALE ? 5 : -161);
+  return BMR * physicalActivityOptions.find(value => value.value === physicalActivity)?.multiplier!;
+}
+
+export function getAgeByBirthDate(birthdate: Date | string | number) {
+  const ageDifMs = Date.now() - new Date(birthdate).getTime();
+  const ageDate = new Date(ageDifMs);
+  return Math.abs(ageDate.getUTCFullYear() - 1970);
 }

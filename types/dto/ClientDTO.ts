@@ -1,5 +1,6 @@
 import {BaseDTO} from './BaseDTO';
 import {Gender} from '../enum/Gender';
+import {PhysicalActivity} from '../enum/PhysicalActivity';
 
 export type ClientDTO = BaseDTO & {
   keycloakId: string;
@@ -9,6 +10,8 @@ export type ClientDTO = BaseDTO & {
   targetCarbohydrate: number;
   targetProtein: number;
   targetFat: number;
+  targetWater: number;
   birthDate: Date;
   gender: Gender;
+  physicalActivity: PhysicalActivity;
 }

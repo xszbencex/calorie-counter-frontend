@@ -1,16 +1,25 @@
-import Head from 'next/head';
+import {Avatar, Button, Icon, IconButton, Paper, Tooltip} from '@mui/material';
 import {DataGrid, GridColDef} from '@mui/x-data-grid';
-import {Button, Icon, IconButton, Paper, Tooltip} from '@mui/material';
 import {useContext, useEffect, useState} from 'react';
-import {GRID_HUN_LOCALE_TEXT} from '../constants/grid-locale';
-import GlobalContext from '../store/global-context';
-import {addArrayElement, deleteArrayElement, modifyArrayElement} from '../utils/common-functions';
-import {createProduct, deleteProduct, getAllProductByUserId, updateProduct} from '../utils/api/product-api';
-import {ProductDTO} from '../types/dto/ProductDTO';
-import {ProductForm} from '../components/forms/product-form';
-import {unitOfMeasureOptions} from '../constants/enum-labels';
+import {EnumLabel, productTypeOptions, unitOfMeasureOptions} from '../../constants/enum-label';
+import GlobalContext from '../../store/global-context';
+import DialogContext from '../../store/dialog-context';
+import {ProductDTO} from '../../types/dto/ProductDTO';
+import {ProductForm} from '../../components/forms/product-form';
+import {
+  createProduct,
+  deleteProduct,
+  getAllProductByProductTypeAndUserId,
+  updateProduct
+} from '../../utils/api/product-api';
+import {addArrayElement, deleteArrayElement, modifyArrayElement} from '../../utils/common-functions';
+import {GRID_HUN_LOCALE_TEXT} from '../../constants/grid-locale';
+import {useRouter} from 'next/router';
+import {ProductType} from '../../types/enum/ProductType';
+import Head from 'next/head';
+import Link from 'next/link';
 
-export default function UsersPage() {
+export default function ProductTypePage() {
   const columns: GridColDef[] = [
     {field: 'name', headerName: 'Név', flex: 1},
     {
@@ -57,22 +66,27 @@ export default function UsersPage() {
   ];
 
   const globalContext = useContext(GlobalContext);
+  const dialogContext = useContext(DialogContext);
+  const router = useRouter();
   const [products, setProducts] = useState<ProductDTO[]>([]);
   const [pageSize, setPageSize] = useState<number>(10);
+  const [productType, setProductType] = useState<EnumLabel & {imageSrc: string}>();
 
   useEffect(() => {
-    refreshTable();
+    const type = (typeof router.query.productType === 'object' ? router.query.productType[0] : router.query.productType) as ProductType;
+    refreshTable(type);
+    setProductType(productTypeOptions.find(value => value.value === type));
   }, []);
 
-  function refreshTable() {
-    getAllProductByUserId(globalContext.loggedInUserId!)
+  function refreshTable(type: ProductType) {
+    getAllProductByProductTypeAndUserId(type, globalContext.loggedInUserId!)
       .then(value => setProducts(value))
-      .catch(error => globalContext.showRestCallErrorDialog(error));
+      .catch(error => dialogContext.showRestCallErrorDialog(error));
   }
 
   function openDialog(product?: ProductDTO) {
     const isUpdate = Boolean(product);
-    globalContext.openFormDialog({
+    dialogContext.openFormDialog({
       title: isUpdate ? 'Étel/ital adatainak módosítása' : 'Új étel/ital hozzáadása',
       formName: 'product-form',
       formComponent: <ProductForm data={product} onFormSubmit={formData => onSubmit(isUpdate, formData)}/>,
@@ -83,32 +97,41 @@ export default function UsersPage() {
     if (isUpdate) {
       updateProduct(formData, formData.id)
         .then(response => {
-          globalContext.closeFormDialog();
+          dialogContext.closeFormDialog();
           modifyArrayElement(response, setProducts);
         })
-        .catch(error => globalContext.showRestCallErrorDialog(error));
+        .catch(error => dialogContext.showRestCallErrorDialog(error));
     } else {
       createProduct(formData)
         .then(response => {
-          globalContext.closeFormDialog();
+          dialogContext.closeFormDialog();
           addArrayElement(response, setProducts);
         })
-        .catch(error => globalContext.showRestCallErrorDialog(error));
+        .catch(error => dialogContext.showRestCallErrorDialog(error));
     }
   };
 
   function deleteRow(product: ProductDTO) {
     deleteProduct(product.id)
       .then(() => deleteArrayElement(product, setProducts))
-      .catch(error => globalContext.showRestCallErrorDialog(error));
+      .catch(error => dialogContext.showRestCallErrorDialog(error));
   }
 
   return (
-    <div>
+    <>
       <Head>
-        <title>MAG Praktikum - Felhasználók kezelése</title>
+        <title>Kalória Számláló - {productType?.label}</title>
       </Head>
-      <div className="actions">
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+        <Link href={'/products'} passHref>
+          <a>
+            <Button startIcon={<Icon>arrow_back</Icon>}>Vissza</Button>
+          </a>
+        </Link>
+        <div style={{display: 'flex', alignItems: 'center', fontSize: 'xx-large', fontWeight: 'bold', marginBottom: 10}}>
+          <Avatar src={productType?.imageSrc} sx={{width: 60, height: 60, mr: 1}}/>
+          {productType?.label}
+        </div>
         <Button startIcon={<Icon>add</Icon>} onClick={() => openDialog()}>
           Új étel/ital felvétele
         </Button>
@@ -129,6 +152,6 @@ export default function UsersPage() {
           localeText={GRID_HUN_LOCALE_TEXT}
         />
       </Paper>
-    </div>
+    </>
   );
 }

@@ -1,10 +1,10 @@
 import {Controller} from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import InputMask from 'react-input-mask';
-import {CCMaskedTextInputProps} from '../../types/FormInputProps';
+import {CCControlledMaskedTextProps, CCFormMaskedTextProps} from '../../types/FormInputProps';
 
-export const CCMaskedText = (
-  {name, control, label, mask, maskChar, onValueChanged, textFieldProps, inputMaskProps}: CCMaskedTextInputProps
+export const CCFormMaskedText = (
+  {name, control, label, mask, maskChar, onValueChanged, textFieldProps, inputMaskProps}: CCFormMaskedTextProps
 ) => {
 
   return (
@@ -42,5 +42,32 @@ export const CCMaskedText = (
         </InputMask>
       )}
     />
+  );
+};
+
+export const CCControlledMaskedText = (
+  {value, onChange, label, mask, maskChar, textFieldProps, inputMaskProps}: CCControlledMaskedTextProps
+) => {
+
+  return (
+    <InputMask
+      mask={mask!}
+      {...inputMaskProps}
+      // @ts-ignore
+      maskChar={maskChar ?? null}
+      onChange={onChange}
+      value={value}>
+      {(inputProps: any) =>
+        <TextField
+          {...inputProps}
+          {...textFieldProps}
+          helperText={textFieldProps?.helperText}
+          size={textFieldProps?.size ?? 'small'}
+          fullWidth={textFieldProps?.fullWidth ?? true}
+          label={label}
+          variant={textFieldProps?.variant ?? 'standard'}
+        />
+      }
+    </InputMask>
   );
 };

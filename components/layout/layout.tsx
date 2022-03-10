@@ -5,6 +5,7 @@ import Sidebar from './sidebar';
 import {DrawerContextProvider} from '../../store/drawer-context';
 import {useKeycloak} from '@react-keycloak/ssr';
 import {CCKecyloakInstance} from '../../types/CCKecyloakInstance';
+import {CCSpeedDial} from '../CCSpeedDial';
 
 export const Layout = (props: { children: ReactElement }) => {
   const {keycloak} = useKeycloak<CCKecyloakInstance>();
@@ -20,6 +21,7 @@ export const Layout = (props: { children: ReactElement }) => {
             <Sidebar>
               <main className={styles.mainContainer}>
                 {props.children}
+                <CCSpeedDial/>
               </main>
             </Sidebar>
           </>

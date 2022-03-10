@@ -1,9 +1,9 @@
 import {Checkbox, FormControl, FormControlLabel} from '@mui/material';
 import {Controller} from 'react-hook-form';
-import {CCCheckboxProps} from '../../types/FormInputProps';
+import {CCControlledCheckboxProps, CCFormCheckboxProps} from '../../types/FormInputProps';
 
-export const CCCheckbox = (
-  {name, control, label, onValueChanged, formControlProps, formControlLabelProps, checkboxProps}: CCCheckboxProps
+export const CCFormCheckbox = (
+  {name, control, label, onValueChanged, formControlProps, formControlLabelProps, checkboxProps}: CCFormCheckboxProps
 ) => {
 
   return (
@@ -33,6 +33,31 @@ export const CCCheckbox = (
                 }}
               />
             )}
+          />
+        }
+      />
+    </FormControl>
+  );
+};
+
+export const CCControlledCheckbox = (
+  {checked, onChange, label, formControlProps, formControlLabelProps, checkboxProps}: CCControlledCheckboxProps
+) => {
+
+  return (
+    <FormControl
+      {...formControlProps}
+      size={formControlProps?.size ?? 'small'}
+      variant={formControlProps?.variant ?? 'outlined'}
+    >
+      <FormControlLabel
+        {...formControlLabelProps}
+        label={label!}
+        control={
+          <Checkbox
+            {...checkboxProps}
+            checked={checked}
+            onChange={onChange}
           />
         }
       />

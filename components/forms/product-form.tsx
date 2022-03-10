@@ -5,13 +5,14 @@ import {Grid, InputAdornment} from '@mui/material';
 import {BaseDTO} from '../../types/dto/BaseDTO';
 import {commonStrings} from '../../constants/common-strings';
 import {FormProps} from '../../types/FormProps';
-import {CCText} from '../input-fields/CCText';
-import { CCSelect } from '../input-fields/CCSelect';
-import {productTypeOptions, unitOfMeasureOptions} from '../../constants/enum-labels';
+import {CCFormText} from '../input-fields/CCText';
+import { CCFormSelect } from '../input-fields/CCSelect';
+import {productTypeOptions, unitOfMeasureOptions} from '../../constants/enum-label';
 import {ProductDTO} from '../../types/dto/ProductDTO';
 import {useEffect, useState} from 'react';
 import {getNumberSchema} from '../../constants/common-schema';
 import {UnitOfMeasure} from '../../types/enum/UnitOfMeasure';
+import {ProductType} from '../../types/enum/ProductType';
 
 type FormData = Omit<ProductDTO, keyof BaseDTO>
 
@@ -61,16 +62,21 @@ export const ProductForm = (props: FormProps) => {
       <form id="product-form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container rowSpacing={2} columnSpacing={2} marginBottom="20px">
           <Grid item xs={6}>
-            <CCText name="name" control={control} label="Név *"/>
+            <CCFormText name="name" control={control} label="Név *"/>
           </Grid>
           <Grid item xs={3}>
-            <CCSelect name="productType" control={control} label="Típusa *" options={productTypeOptions}/>
+            <CCFormSelect
+              name="productType"
+              control={control}
+              label="Típusa *"
+              options={productTypeOptions.filter(value => value.value !== ProductType.WATER)}
+            />
           </Grid>
           <Grid item xs={3}>
-            <CCSelect name="unitOfMeasure" control={control} label="Mértékegység *" options={unitOfMeasureOptions}/>
+            <CCFormSelect name="unitOfMeasure" control={control} label="Mértékegység *" options={unitOfMeasureOptions}/>
           </Grid>
           <Grid item xs={2}>
-            <CCText
+            <CCFormText
               name="carbohydrate"
               control={control}
               label="Szénhidrát *"
@@ -83,7 +89,7 @@ export const ProductForm = (props: FormProps) => {
             />
           </Grid>
           <Grid item xs={2}>
-            <CCText
+            <CCFormText
               name="protein"
               control={control}
               label="Fehérje *"
@@ -96,7 +102,7 @@ export const ProductForm = (props: FormProps) => {
             />
           </Grid>
           <Grid item xs={2}>
-            <CCText
+            <CCFormText
               name="fat"
               control={control}
               label="Zsír *"
@@ -109,7 +115,7 @@ export const ProductForm = (props: FormProps) => {
             />
           </Grid>
           <Grid item xs={2}>
-            <CCText
+            <CCFormText
               name="calorie"
               control={control}
               label="Kalória *"
@@ -122,7 +128,7 @@ export const ProductForm = (props: FormProps) => {
             />
           </Grid>
           <Grid item xs={6}>
-            <CCText
+            <CCFormText
               name="comment"
               control={control}
               label="Megjegyzés"

@@ -2,10 +2,10 @@ import {Controller} from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import {DateTimePicker} from '@mui/lab';
 import {FormHelperText} from '@mui/material';
-import {CCDateTimePickerProps} from '../../types/FormInputProps';
+import {CCControlledDateTimePickerProps, CCFormDateTimePickerProps} from '../../types/FormInputProps';
 
-export const CCDateTime = (
-  {name, control, label, helperText, onValueChanged, dateTimePickerProps, textFieldProps}: CCDateTimePickerProps
+export const CCFormDateTime = (
+  {name, control, label, helperText, onValueChanged, dateTimePickerProps, textFieldProps}: CCFormDateTimePickerProps
 ) => {
   return (
     <Controller
@@ -26,7 +26,9 @@ export const CCDateTime = (
               }
             }}
             label={label}
-            mask={dateTimePickerProps?.mask ?? '____.__.__. __:__'}
+            views={dateTimePickerProps?.views ?? ['day', 'hours', 'minutes', 'seconds']}
+            inputFormat={dateTimePickerProps?.inputFormat ?? 'yyyy.MM.DD. HH:mm:ss'}
+            mask={dateTimePickerProps?.mask ?? '____.__.__. __:__:__'}
             renderInput={(params) =>
               <TextField
                 {...params}
@@ -42,5 +44,34 @@ export const CCDateTime = (
         </>
       )}
     />
+  );
+};
+
+export const CCControlledDateTime = (
+  {value, onChange, label, helperText, dateTimePickerProps, textFieldProps}: CCControlledDateTimePickerProps
+) => {
+  return (
+    <>
+      {/*@ts-ignore*/}
+      <DateTimePicker
+        {...dateTimePickerProps}
+        value={value}
+        onChange={onChange}
+        label={label}
+        views={dateTimePickerProps?.views ?? ['day', 'hours', 'minutes', 'seconds']}
+        inputFormat={dateTimePickerProps?.inputFormat ?? 'yyyy.MM.DD. HH:mm:ss'}
+        mask={dateTimePickerProps?.mask ?? '____.__.__. __:__:__'}
+        renderInput={(params) =>
+          <TextField
+            {...params}
+            {...textFieldProps}
+            fullWidth={textFieldProps?.fullWidth ?? true}
+            size={textFieldProps?.size ?? 'small'}
+            label={label}
+            variant={textFieldProps?.variant ?? 'standard'}
+          />}
+      />
+      <FormHelperText>{helperText}</FormHelperText>
+    </>
   );
 };

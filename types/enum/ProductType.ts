@@ -1,5 +1,12 @@
 export enum ProductType {
+  PROTEIN = 'PROTEIN',
+  VEGETABLES = 'VEGETABLES',
+  FRUITS = 'FRUITS',
+  GRAINS = 'GRAINS',
+  DAIRY = 'DAIRY',
+  SWEETS = 'SWEETS',
+  OTHERS = 'OTHERS',
   MEAL = 'MEAL',
-  FOOD = 'FOOD',
-  DRINK = 'DRINK'
+  DRINK = 'DRINK',
+  WATER = 'WATER'
 }

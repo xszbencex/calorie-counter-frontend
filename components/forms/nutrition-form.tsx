@@ -1,21 +1,23 @@
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useForm} from 'react-hook-form';
 import * as yup from 'yup';
-import {Button, Grid, InputAdornment} from '@mui/material';
+import {Avatar, Button, Grid, InputAdornment, ListItem, ListItemAvatar} from '@mui/material';
 import {BaseDTO} from '../../types/dto/BaseDTO';
 import {commonStrings} from '../../constants/common-strings';
 import {FormProps} from '../../types/FormProps';
-import {CCText} from '../input-fields/CCText';
+import {CCFormText} from '../input-fields/CCText';
 import {NutritionDTO} from '../../types/dto/NutritionDTO';
-import {CCAutocomplete} from '../input-fields/CCAutocomplete';
-import {useContext, useEffect, useState} from 'react';
+import {CCFormAutocomplete} from '../input-fields/CCAutocomplete';
+import {Fragment, useContext, useEffect, useState} from 'react';
 import {ProductDTO} from '../../types/dto/ProductDTO';
 import {getAllProductByUserId} from '../../utils/api/product-api';
 import GlobalContext from '../../store/global-context';
-import {unitOfMeasureOptions} from '../../constants/enum-labels';
+import {productTypeOptions, unitOfMeasureOptions} from '../../constants/enum-label';
 import {UnitOfMeasure} from '../../types/enum/UnitOfMeasure';
-import {CCDate} from '../input-fields/CCDate';
+import {CCFormDate} from '../input-fields/CCDate';
 import {getDateSchema, getNumberSchema} from '../../constants/common-schema';
+import moment from 'moment';
+import DialogContext from '../../store/dialog-context';
 
 type FormData = Omit<NutritionDTO, keyof BaseDTO>
 
@@ -24,7 +26,7 @@ const defaultFormValues = {
 } as FormData;
 
 const schema = yup.object({
-  nutritionDate: getDateSchema().required(commonStrings.required),
+  nutritionDate: getDateSchema().max(moment().add(1, 's'), 'Jövőbeli érték nem adható meg.').required(commonStrings.required),
   carbohydrate: getNumberSchema(0, 10000).required(commonStrings.required),
   protein: getNumberSchema(0, 10000).required(commonStrings.required),
   fat: getNumberSchema(0, 10000).required(commonStrings.required),
@@ -42,12 +44,13 @@ export const NutritionForm = (props: FormProps) => {
   const {handleSubmit, control, watch, setValue} = methods;
 
   const globalContext = useContext(GlobalContext);
+  const dialogContext = useContext(DialogContext);
   const [products, setProducts] = useState<ProductDTO[]>([]);
 
   useEffect(() => {
     getAllProductByUserId(globalContext.loggedInUserId!)
       .then(response => setProducts(response))
-      .catch(error => globalContext.showRestCallErrorDialog(error));
+      .catch(error => dialogContext.showRestCallErrorDialog(error));
   }, []);
 
   const onSubmit = (formData: FormData) => {
@@ -62,7 +65,7 @@ export const NutritionForm = (props: FormProps) => {
   useEffect(() => {
     if (product) {
       if (!quantity) {
-        setValue('quantity', product.unitOfMeasure === UnitOfMeasure.PIECE ? 1 : 100);
+        setValue('quantity', product.unitOfMeasure === UnitOfMeasure.PIECE ? 1 : 100, {shouldValidate: true});
       } else {
         if (!isUpdate) {
           refreshNutrients();
@@ -84,7 +87,7 @@ export const NutritionForm = (props: FormProps) => {
           break;
         default: value = 0;
       }
-      setValue(prop as 'carbohydrate' | 'protein' | 'fat' | 'calorie', value);
+      setValue(prop as 'carbohydrate' | 'protein' | 'fat' | 'calorie', value, {shouldValidate: true});
     }
   }
 
@@ -93,20 +96,37 @@ export const NutritionForm = (props: FormProps) => {
       <form id="nutrition-form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container rowSpacing={2} columnSpacing={2} marginBottom="20px">
           <Grid item xs={3}>
-            <CCDate name="nutritionDate" control={control} label="Étkezés napja *"/>
+            <CCFormDate name="nutritionDate" control={control} label="Étkezés napja *" datePickerProps={{maxDate: moment()}}/>
           </Grid>
           <Grid item xs={5.5}>
-            <CCAutocomplete
+            <CCFormAutocomplete
               name="product"
               control={control}
               label="Termék"
               options={products}
               getOptionLabel={option => option.name}
+              autocompleteProps={{
+                groupBy: option => option.productType,
+                renderGroup: params => (
+                  <Fragment key={params.key}>
+                    <ListItem sx={{pl: 1, opacity: 0.8}}>
+                      <ListItemAvatar>
+                        <Avatar
+                          alt={params.key}
+                          src={productTypeOptions.find(value => value.value === params.group)?.imageSrc}
+                        />
+                      </ListItemAvatar>
+                      {productTypeOptions.find(value => value.value === params.group)?.label}
+                    </ListItem>
+                    {params.children}
+                  </Fragment>
+                )
+              }}
             />
           </Grid>
           {product && (
             <Grid item xs={1.5}>
-              <CCText
+              <CCFormText
                 name="quantity"
                 control={control}
                 label="Mennyiség"
@@ -114,7 +134,7 @@ export const NutritionForm = (props: FormProps) => {
                   type: 'number',
                   InputProps: {
                     endAdornment: <InputAdornment position="end">
-                      {unitOfMeasureOptions.find(value => value.value === product?.unitOfMeasure)?.label2}
+                      {unitOfMeasureOptions.find(value => value.value === product?.unitOfMeasure)?.unit}
                     </InputAdornment>,
                   },
                 }}
@@ -125,7 +145,7 @@ export const NutritionForm = (props: FormProps) => {
             {isUpdate && product && quantity && <Button onClick={() => refreshNutrients()}>Kiszámítás</Button>}
           </Grid>
           <Grid item xs={2}>
-            <CCText
+            <CCFormText
               name="carbohydrate"
               control={control}
               label="Szénhidrát *"
@@ -138,7 +158,7 @@ export const NutritionForm = (props: FormProps) => {
             />
           </Grid>
           <Grid item xs={2}>
-            <CCText
+            <CCFormText
               name="protein"
               control={control}
               label="Fehérje *"
@@ -151,7 +171,7 @@ export const NutritionForm = (props: FormProps) => {
             />
           </Grid>
           <Grid item xs={2}>
-            <CCText
+            <CCFormText
               name="fat"
               control={control}
               label="Zsír *"
@@ -164,7 +184,7 @@ export const NutritionForm = (props: FormProps) => {
             />
           </Grid>
           <Grid item xs={2}>
-            <CCText
+            <CCFormText
               name="calorie"
               control={control}
               label="Kalória *"
@@ -177,7 +197,7 @@ export const NutritionForm = (props: FormProps) => {
             />
           </Grid>
           <Grid item xs={6}>
-            <CCText
+            <CCFormText
               name="comment"
               control={control}
               label="Megjegyzés"

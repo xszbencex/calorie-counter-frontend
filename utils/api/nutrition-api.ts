@@ -24,6 +24,11 @@ export async function getNutritionSumByDate(nutritionDate: string): Promise<Nutr
   return await restCall(url, 'GET');
 }
 
+export async function getNutritionSumByMonth(year: number | string, month: number | string): Promise<NutritionSumResponse[]> {
+  const url = `${rootUrl}/sum/year/${year}/month/${month}`;
+  return await restCall(url, 'GET');
+}
+
 export async function createNutrition(request: NutritionDTO): Promise<NutritionDTO> {
   const url = `${rootUrl}`;
   return await restCall(url, 'POST', {requestBody: request});

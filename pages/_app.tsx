@@ -3,12 +3,10 @@ import cookie from 'cookie';
 import type {AppContext, AppProps} from 'next/app';
 import Head from 'next/head';
 import {createTheme, ThemeProvider} from '@mui/material';
-import {green, mainDark, mainLight} from '../constants/colors';
+import {green, primaryColor, primaryDarkColor, secondary, white} from '../constants/colors';
 import 'moment/locale/hu';
 import moment from 'moment';
 import DateAdapter from '@mui/lab/AdapterMoment';
-
-import {GlobalContextProvider} from '../store/global-context';
 import {huHU} from '@mui/material/locale';
 import {LocalizationProvider} from '@mui/lab';
 import {Layout} from '../components/layout/layout';
@@ -17,22 +15,24 @@ import {PageLoading} from '../components/layout/page-loading';
 import {keycloakConfig} from '../constants/keycloakConfig';
 import {IncomingMessage} from 'http';
 import AuthGuard from '../components/AuthGuard';
+import {DialogContextProvider} from '../store/dialog-context';
 
 function MyApp({Component, pageProps, cookies}: AppProps & { cookies: unknown }) {
   const theme = createTheme(
     {
       palette: {
         primary: {
-          main: mainDark,
-          contrastText: '#FFF'
+          main: primaryColor,
+          contrastText: white,
+          dark: primaryDarkColor
         },
         secondary: {
-          main: mainLight,
-          contrastText: '#FFF'
+          main: secondary,
+          contrastText: white
         },
         success: {
           main: green
-        }
+        },
       },
       components: {
         MuiButton: {
@@ -43,16 +43,16 @@ function MyApp({Component, pageProps, cookies}: AppProps & { cookies: unknown })
         MuiListItemButton: {
           styleOverrides: {
             root: {
-              backgroundColor: mainDark,
+              backgroundColor: primaryColor,
               '&.Mui-selected': {
-                backgroundColor: mainLight
+                backgroundColor: secondary
               },
               '&:hover': {
-                backgroundColor: mainLight,
+                backgroundColor: secondary,
                 opacity: 0.95
               },
               '&.Mui-selected:hover': {
-                backgroundColor: mainLight,
+                backgroundColor: secondary,
                 opacity: 0.95
               }
             },
@@ -75,13 +75,13 @@ function MyApp({Component, pageProps, cookies}: AppProps & { cookies: unknown })
       </Head>
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={DateAdapter} locale={moment.locale('hu')}>
-          <GlobalContextProvider>
+          <DialogContextProvider>
             <AuthGuard>
               <Layout>
                 <Component {...pageProps} />
               </Layout>
             </AuthGuard>
-          </GlobalContextProvider>
+          </DialogContextProvider>
         </LocalizationProvider>
       </ThemeProvider>
     </SSRKeycloakProvider>

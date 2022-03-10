@@ -6,7 +6,7 @@ import {ReactElement, useContext, useEffect, useState} from 'react';
 import DrawerContext from '../../store/drawer-context';
 import {Box, CSSObject} from '@mui/material';
 import Icon from '@mui/material/Icon';
-import {mainDark} from '../../constants/colors';
+import {primaryColor} from '../../constants/colors';
 import {NavList} from './nav-list';
 
 const drawerWidth = 260;
@@ -83,7 +83,7 @@ export default function Sidebar(props: { children: ReactElement }) {
         sx={{
           '& .MuiDrawer-paper': {
             top: drawerContext.headerHeight,
-            backgroundColor: mainDark,
+            backgroundColor: primaryColor,
             color: 'white',
             '&::-webkit-scrollbar': {
               width: 5,

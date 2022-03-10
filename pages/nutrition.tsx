@@ -8,6 +8,7 @@ import {addArrayElement, deleteArrayElement, modifyArrayElement} from '../utils/
 import {NutritionDTO} from '../types/dto/NutritionDTO';
 import {createNutrition, deleteNutrition, getAllNutritionByUserId, updateNutrition} from '../utils/api/nutrition-api';
 import {NutritionForm} from '../components/forms/nutrition-form';
+import DialogContext from '../store/dialog-context';
 
 export default function NutritionPage() {
   const columns: GridColDef[] = [
@@ -55,18 +56,19 @@ export default function NutritionPage() {
   ];
 
   const globalContext = useContext(GlobalContext);
+  const dialogContext = useContext(DialogContext);
   const [nutritionList, setNutritionList] = useState<NutritionDTO[]>([]);
   const [pageSize, setPageSize] = useState<number>(10);
 
   useEffect(() => {
     getAllNutritionByUserId(globalContext.loggedInUserId!)
       .then(value => setNutritionList(value))
-      .catch(error => globalContext.showRestCallErrorDialog(error));
+      .catch(error => dialogContext.showRestCallErrorDialog(error));
   }, []);
 
   function openDialog(nutrition?: NutritionDTO) {
     const isUpdate = Boolean(nutrition);
-    globalContext.openFormDialog({
+    dialogContext.openFormDialog({
       title: isUpdate ? 'Étkezés adatainak módosítása' : 'Új étkezés hozzáadása',
       formName: 'nutrition-form',
       formComponent: <NutritionForm data={nutrition} onFormSubmit={formData => onSubmit(isUpdate, formData)}/>,
@@ -77,30 +79,30 @@ export default function NutritionPage() {
     if (isUpdate) {
       updateNutrition(formData, formData.id)
         .then(response => {
-          globalContext.closeFormDialog();
+          dialogContext.closeFormDialog();
           modifyArrayElement(response, setNutritionList);
         })
-        .catch(error => globalContext.showRestCallErrorDialog(error));
+        .catch(error => dialogContext.showRestCallErrorDialog(error));
     } else {
       createNutrition(formData)
         .then(response => {
-          globalContext.closeFormDialog();
+          dialogContext.closeFormDialog();
           addArrayElement(response, setNutritionList);
         })
-        .catch(error => globalContext.showRestCallErrorDialog(error));
+        .catch(error => dialogContext.showRestCallErrorDialog(error));
     }
   };
 
   function deleteRow(nutrition: NutritionDTO) {
     deleteNutrition(nutrition.id)
       .then(() => deleteArrayElement(nutrition, setNutritionList))
-      .catch(error => globalContext.showRestCallErrorDialog(error));
+      .catch(error => dialogContext.showRestCallErrorDialog(error));
   }
 
   return (
     <div>
       <Head>
-        <title>MAG Praktikum - Étkezés</title>
+        <title>Kalória Számláló - Étkezés</title>
       </Head>
       <div className="actions">
         <Button startIcon={<Icon>add</Icon>} onClick={() => openDialog()}>

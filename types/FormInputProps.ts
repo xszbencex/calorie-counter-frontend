@@ -1,10 +1,22 @@
-import {EnumLabels} from '../constants/enum-labels';
+import {EnumLabel} from '../constants/enum-label';
 import {Control} from 'react-hook-form';
-import {AutocompleteProps, CheckboxProps, FormControlLabelProps, FormControlProps, SelectProps, TextFieldProps} from '@mui/material';
+import {
+    AutocompleteChangeDetails,
+    AutocompleteChangeReason,
+    AutocompleteProps,
+    AutocompleteValue,
+    CheckboxProps,
+    FormControlLabelProps,
+    FormControlProps, SelectChangeEvent,
+    SelectProps,
+    TextFieldProps
+} from '@mui/material';
 import {Props} from 'react-input-mask';
 import {DatePickerProps, DateTimePickerProps} from '@mui/lab';
+import React, {ChangeEvent, ReactNode} from 'react';
+import {Moment} from 'moment';
 
-type CCBaseInputProps = {
+type CCBaseFormInputProps = {
     /**
      * A form field neve a formban
      */
@@ -29,7 +41,14 @@ type CCBaseInputProps = {
     onValueChanged?: (value: any) => void;
 }
 
-export type CCTextInputProps = CCBaseInputProps & {
+type CCBaseControlledInputProps = {
+    /**
+     * Form field labelje
+     */
+    label?: string;
+}
+
+type CCTextInputProps = {
     /**
      * TextField komponens propertyk
      *
@@ -50,11 +69,11 @@ export type CCTextInputProps = CCBaseInputProps & {
     textFieldProps?: Omit<TextFieldProps, 'name' | 'value' | 'onChange' | 'error' | 'label'>;
 }
 
-export type CCSelectProps = CCBaseInputProps & {
+type CCSelectProps = {
     /**
      * Az opciók tömbje
      */
-    options: EnumLabels | any[];
+    options: EnumLabel[] | any[];
 
     /**
      * Legördülőben egy elem megjelenítését megadó függvény.
@@ -101,11 +120,11 @@ export type CCSelectProps = CCBaseInputProps & {
     selectProps?: Omit<SelectProps, 'name' | 'value' | 'onChange' | 'error' | 'multiple' | 'renderValue'>
 }
 
-export type CCAutocompleteProps = CCBaseInputProps & {
+type CCAutocompleteProps = {
     /**
      * Az opciók tömbje
      */
-    options: EnumLabels | any[];
+    options: EnumLabel[] | any[];
 
     /**
      * Legördülőben egy elem megjelenítését megadó függvény.
@@ -152,7 +171,7 @@ export type CCAutocompleteProps = CCBaseInputProps & {
       | 'getOptionLabel' | 'renderInput' | 'renderOption'>;
 }
 
-export type CCMaskedTextInputProps = CCBaseInputProps & {
+type CCMaskedTextProps = {
     /**
      * Mask megadása [react-input-mask doksi](https://www.npmjs.com/package/react-input-mask) alapján.
      */
@@ -184,7 +203,7 @@ export type CCMaskedTextInputProps = CCBaseInputProps & {
     textFieldProps?: Omit<TextFieldProps, 'name' | 'value' | 'onChange' | 'error' | 'label'>;
 }
 
-export type CCDatePickerProps = CCBaseInputProps & {
+type CCDatePickerProps = {
     /**
      * Ha születési dátum kiválasztó akkor alapértelmezetten az évekkel kezd és van hónap választó.
      */
@@ -207,7 +226,7 @@ export type CCDatePickerProps = CCBaseInputProps & {
      * - openTo
      * - minDate, maxDate
      */
-    datePickerProps?: Omit<DatePickerProps, 'label' | 'onChange'>
+    datePickerProps?: Omit<DatePickerProps, 'label' | 'onChange' | 'renderInput' | 'value'>
 
     /**
      * TextField komponens propertyk
@@ -225,7 +244,7 @@ export type CCDatePickerProps = CCBaseInputProps & {
     textFieldProps?: Omit<TextFieldProps, 'name' | 'value' | 'onChange' | 'error' | 'label' | 'disabled' | 'helperText'>;
 }
 
-export type CCDateTimePickerProps = CCBaseInputProps & {
+type CCDateTimePickerProps = {
     /**
      * Segítő szöveg (hint) megjelenítése.
      */
@@ -244,7 +263,7 @@ export type CCDateTimePickerProps = CCBaseInputProps & {
      * - minDate, maxDate
      * - minTime, maxTime
      */
-    dateTimePickerProps?: Omit<DateTimePickerProps, 'label' | 'onChange' | 'value'>
+    dateTimePickerProps?: Omit<DateTimePickerProps, 'label' | 'onChange' | 'renderInput' | 'value'>
 
     /**
      * TextField komponens propertyk
@@ -262,11 +281,11 @@ export type CCDateTimePickerProps = CCBaseInputProps & {
     textFieldProps?: Omit<TextFieldProps, 'name' | 'value' | 'onChange' | 'error' | 'label' | 'disabled' | 'helperText'>;
 }
 
-export type CCRadioButtonProps = CCBaseInputProps & {
+type CCRadioButtonProps = {
     /**
      * Az opciók tömbje
      */
-    options: EnumLabels | any[];
+    options: EnumLabel[] | any[];
 
     /**
      * Radio button labelek megjelenítését megadó függvény.
@@ -282,7 +301,7 @@ export type CCRadioButtonProps = CCBaseInputProps & {
     row?: boolean;
 }
 
-export type CCCheckboxProps = CCBaseInputProps & {
+type CCCheckboxProps = {
     /**
      * Checkbox komponens propertyk
      *
@@ -314,3 +333,99 @@ export type CCCheckboxProps = CCBaseInputProps & {
      */
     formControlProps?: FormControlProps;
 }
+
+export type CCFormAutocompleteProps = CCBaseFormInputProps & CCAutocompleteProps;
+export type CCFormTextInputProps = CCBaseFormInputProps & CCTextInputProps;
+export type CCFormCheckboxProps = CCBaseFormInputProps & CCCheckboxProps;
+export type CCFormMaskedTextProps = CCBaseFormInputProps & CCMaskedTextProps;
+export type CCFormRadioButtonProps = CCBaseFormInputProps & CCRadioButtonProps;
+export type CCFormSelectProps = CCBaseFormInputProps & CCSelectProps;
+export type CCFormDatePickerProps = CCBaseFormInputProps & CCDatePickerProps;
+export type CCFormDateTimePickerProps = CCBaseFormInputProps & CCDateTimePickerProps;
+
+export type CCControlledAutocompleteProps = CCBaseControlledInputProps & CCAutocompleteProps & {
+
+    value: AutocompleteValue<any, any, any, any>;
+
+    /**
+     * Value paraméter adja az értéket
+     */
+    onChange: (
+      event: React.SyntheticEvent,
+      value: AutocompleteValue<any, any, any, any>,
+      reason: AutocompleteChangeReason,
+      details?: AutocompleteChangeDetails<any>,
+    ) => void;
+}
+
+export type CCControlledTextInputProps = CCBaseControlledInputProps & CCFormTextInputProps & {
+
+    value: string | null;
+
+    /**
+     * event.target.value
+     */
+    onChange: (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+};
+
+export type CCControlledCheckboxProps = CCBaseControlledInputProps & CCCheckboxProps & {
+
+    checked: boolean;
+
+    /**
+     * event.target.checked
+     */
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+export type CCControlledMaskedTextProps = CCBaseControlledInputProps & CCMaskedTextProps & {
+
+    value: string | number | readonly string[];
+
+    /**
+     * event.target.value
+     */
+    onChange: (event: ChangeEvent<any>) => void;
+};
+
+export type CCControlledRadioButtonProps = CCBaseControlledInputProps & CCRadioButtonProps & {
+
+    value: string | any;
+
+    /**
+     * event.target.value vagy value
+     */
+    onChange: (event: ChangeEvent<any>, value: string) => void;
+};
+
+export type CCControlledSelectProps = CCBaseControlledInputProps & CCSelectProps & {
+
+    value: any;
+
+    /**
+     * event.target.value
+     */
+    onChange: (event: SelectChangeEvent<any>, child?: ReactNode) => void;
+};
+
+export type CCControlledDatePickerProps = CCBaseControlledInputProps & CCDatePickerProps & {
+
+    open: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+
+    value: Date | string | null;
+
+    onChange: (newDate: Date | Moment | null | unknown) => void;
+};
+
+export type CCControlledDateTimePickerProps = CCBaseControlledInputProps & CCDateTimePickerProps & {
+
+    open: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+
+    value: Date | string | null;
+
+    onChange: (newDate: Date | Moment | null | unknown) => void;
+};

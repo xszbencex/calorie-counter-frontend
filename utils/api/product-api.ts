@@ -1,5 +1,6 @@
 import {restCall} from '../restCall';
 import {ProductDTO} from '../../types/dto/ProductDTO';
+import {ProductType} from '../../types/enum/ProductType';
 
 const rootUrl = '/product';
 
@@ -10,6 +11,11 @@ export async function getAllProduct(): Promise<ProductDTO[]> {
 
 export async function getAllProductByUserId(userId: string): Promise<ProductDTO[]> {
   const url = `${rootUrl}/user/${userId}`;
+  return await restCall(url, 'GET');
+}
+
+export async function getAllProductByProductTypeAndUserId(productType: ProductType, userId: string): Promise<ProductDTO[]> {
+  const url = `${rootUrl}/type/${productType}/user/${userId}`;
   return await restCall(url, 'GET');
 }
 

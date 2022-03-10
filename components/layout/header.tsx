@@ -6,7 +6,7 @@ import React, {useContext, useEffect, useRef} from 'react';
 import DrawerContext from '../../store/drawer-context';
 import {useKeycloak} from '@react-keycloak/ssr';
 import {CCKecyloakInstance} from '../../types/CCKecyloakInstance';
-import {mainDark} from '../../constants/colors';
+import {primaryColor} from '../../constants/colors';
 
 export const Header = () => {
   const drawerContext = useContext(DrawerContext);
@@ -14,15 +14,15 @@ export const Header = () => {
   const headerRef = useRef<HTMLDivElement>(null);
 
   const logout = () => {
-    keycloak?.logout();
+    keycloak?.logout({redirectUri: `${location.origin}/`});
   };
 
   const login = () => {
-    keycloak?.login();
+    keycloak?.login({redirectUri: `${location.origin}/home`});
   };
 
   const register = () => {
-    keycloak?.register();
+    keycloak?.register({redirectUri: `${location.origin}/home`});
   };
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export const Header = () => {
   return (
     <>
       <div className={styles.fixed} ref={headerRef}>
-        <div className={styles.headerContainer} style={{backgroundColor: mainDark}}>
+        <div className={styles.headerContainer} style={{backgroundColor: primaryColor}}>
           <div className={styles.logo}>
             <Link href={'/'} passHref>
               <a>
@@ -46,13 +46,15 @@ export const Header = () => {
           <div className={styles.profile}>
             {keycloak?.authenticated ? (
               <>
-                {`${keycloak.tokenParsed?.family_name} ${keycloak.tokenParsed?.given_name}`}
-                <Button onClick={() => logout()}>Kilépés</Button>
+                <span style={{textTransform: 'capitalize', fontSize: 'large'}}>
+                  {`${keycloak.tokenParsed?.family_name} ${keycloak.tokenParsed?.given_name}`}
+                </span>
+                <Button onClick={() => logout()} sx={{ml: 2}}>Kilépés</Button>
               </>
             ): (
               <>
                 <Button onClick={() => register()}>Regisztrálás</Button>
-                <Button onClick={() => login()}>Belépés</Button>
+                <Button onClick={() => login()} sx={{ml: 2}}>Belépés</Button>
               </>
             )}
           </div>
