@@ -43,17 +43,16 @@ function MyApp({Component, pageProps, cookies}: AppProps & { cookies: unknown })
         MuiListItemButton: {
           styleOverrides: {
             root: {
-              backgroundColor: primaryColor,
               '&.Mui-selected': {
-                backgroundColor: secondary
+                background: 'linear-gradient(90deg, rgba(70,184,2,1) 0%, rgba(182,223,4,1) 100%)'
               },
               '&:hover': {
-                backgroundColor: secondary,
+                background: 'linear-gradient(90deg, rgba(70,184,2,0.7) 0%, rgba(182,223,4,0.7) 100%)',
                 opacity: 0.95
               },
               '&.Mui-selected:hover': {
-                backgroundColor: secondary,
-                opacity: 0.95
+                background:'linear-gradient(90deg, rgba(70,184,2,0.7) 0%, rgba(182,223,4,0.7) 100%)',
+                opacity: 0.8
               }
             },
           }
@@ -70,7 +69,7 @@ function MyApp({Component, pageProps, cookies}: AppProps & { cookies: unknown })
       LoadingComponent={<PageLoading/>}
     >
       <Head>
-        <title>Kalória számláló</title>
+        <title>Kalóriaszámláló</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
       </Head>
       <ThemeProvider theme={theme}>

@@ -4,7 +4,7 @@ import {NutritionSumResponse} from '../../types/response/NutritionSumResponse';
 import {getNutritionSumByMonth} from '../../utils/api/nutrition-api';
 import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
 import {CCControlledSelect} from '../input-fields/CCSelect';
-import {Box} from '@mui/material';
+import {Box, useMediaQuery} from '@mui/material';
 import {monthOptions} from '../../constants/enum-label';
 
 const currentYear = new Date().getFullYear();
@@ -15,6 +15,7 @@ export function MonthlyReviewChart() {
   const [monthlyNutrition, setMonthlyNutrition] = useState<NutritionSumResponse[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | string>(currentYear);
   const [selectedMonth, setSelectedMonth] = useState<number | string>(currentMonth);
+  const smallScreen = useMediaQuery('(max-width: 1000px)');
 
   useEffect(() => {
     getNutritionSumByMonth(selectedYear, selectedMonth)
@@ -53,10 +54,64 @@ export function MonthlyReviewChart() {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="calorieSum" fill="#8884d8" name="Kalória" />
-          <Bar dataKey="proteinSum" fill="#8884d8" name="Fehérje" />
-          <Bar dataKey="fatSum" fill="#8884d8" name="Zsír" />
-          <Bar dataKey="carbohydrateSum" fill="#8884d8" name="Szénhidrát" />
+          <Bar dataKey="calorieSum" fill="#317b29" name="Kalória (kcal)" />
+        </BarChart>
+      </ResponsiveContainer>
+      {!smallScreen ? (
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart data={monthlyNutrition}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="nutritionDate" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="carbohydrateSum" fill="#2ba6a7" name="Szénhidrát (g)" />
+            <Bar dataKey="proteinSum" fill="#f2965c" name="Fehérje (g)" />
+            <Bar dataKey="fatSum" fill="#f7e23d" name="Zsír (g)" />
+          </BarChart>
+        </ResponsiveContainer>
+      ) : (
+        <>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={monthlyNutrition}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="nutritionDate" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="carbohydrateSum" fill="#2ba6a7" name="Szénhidrát (g)" />
+            </BarChart>
+          </ResponsiveContainer>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={monthlyNutrition}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="nutritionDate" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="proteinSum" fill="#f2965c" name="Fehérje (g)" />
+            </BarChart>
+          </ResponsiveContainer>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={monthlyNutrition}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="nutritionDate" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="fatSum" fill="#f7e23d" name="Zsír (g)" />
+            </BarChart>
+          </ResponsiveContainer>
+        </>
+      )}
+      <ResponsiveContainer width="100%" height={250}>
+        <BarChart data={monthlyNutrition}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="nutritionDate" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="waterSum" fill="#029ffa" name="Víz (l)" />
         </BarChart>
       </ResponsiveContainer>
     </>

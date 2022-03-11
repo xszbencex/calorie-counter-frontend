@@ -9,6 +9,7 @@ import {NutritionDTO} from '../types/dto/NutritionDTO';
 import {createNutrition, deleteNutrition, getAllNutritionByUserId, updateNutrition} from '../utils/api/nutrition-api';
 import {NutritionForm} from '../components/forms/nutrition-form';
 import DialogContext from '../store/dialog-context';
+import {unitOfMeasureOptions} from '../constants/enum-label';
 
 export default function NutritionPage() {
   const columns: GridColDef[] = [
@@ -31,6 +32,13 @@ export default function NutritionPage() {
     {
       field: 'calorie', headerName: 'Kalória', flex: 1,
       valueGetter: params => `${params.row.calorie} kcal`
+    },
+    {
+      field: 'product', headerName: 'Étel/Ital', flex: 1,
+      valueGetter: params => params.row.product
+        // eslint-disable-next-line max-len
+        ? `${params.row.quantity} ${unitOfMeasureOptions.find(value => value.value === params.row.product.unitOfMeasure)?.unit} ${params.row.product.name}`
+        : 'Egyéb'
     },
     {
       field: 'action', headerName: 'Műveletek',
@@ -102,14 +110,14 @@ export default function NutritionPage() {
   return (
     <div>
       <Head>
-        <title>Kalória Számláló - Étkezés</title>
+        <title>Kalóriaszámláló - Étkezés</title>
       </Head>
       <div className="actions">
         <Button startIcon={<Icon>add</Icon>} onClick={() => openDialog()}>
           Új étkezés felvétele
         </Button>
       </div>
-      <Paper elevation={5} sx={{marginTop: '10px'}}>
+      <Paper elevation={5} sx={{marginTop: '10px', backgroundColor: 'transparent'}}>
         <DataGrid
           rows={nutritionList}
           columns={columns}

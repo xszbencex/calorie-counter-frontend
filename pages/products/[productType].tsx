@@ -1,7 +1,7 @@
 import {Avatar, Button, Icon, IconButton, Paper, Tooltip} from '@mui/material';
 import {DataGrid, GridColDef} from '@mui/x-data-grid';
 import {useContext, useEffect, useState} from 'react';
-import {EnumLabel, productTypeOptions, unitOfMeasureOptions} from '../../constants/enum-label';
+import {EnumLabel, ProductOptionsProps, productTypeOptions, unitOfMeasureOptions} from '../../constants/enum-label';
 import GlobalContext from '../../store/global-context';
 import DialogContext from '../../store/dialog-context';
 import {ProductDTO} from '../../types/dto/ProductDTO';
@@ -70,7 +70,7 @@ export default function ProductTypePage() {
   const router = useRouter();
   const [products, setProducts] = useState<ProductDTO[]>([]);
   const [pageSize, setPageSize] = useState<number>(10);
-  const [productType, setProductType] = useState<EnumLabel & {imageSrc: string}>();
+  const [productType, setProductType] = useState<ProductOptionsProps>();
 
   useEffect(() => {
     const type = (typeof router.query.productType === 'object' ? router.query.productType[0] : router.query.productType) as ProductType;
@@ -120,7 +120,7 @@ export default function ProductTypePage() {
   return (
     <>
       <Head>
-        <title>Kalória Számláló - {productType?.label}</title>
+        <title>Kalóriaszámláló - {productType?.label}</title>
       </Head>
       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <Link href={'/products'} passHref>
@@ -130,13 +130,15 @@ export default function ProductTypePage() {
         </Link>
         <div style={{display: 'flex', alignItems: 'center', fontSize: 'xx-large', fontWeight: 'bold', marginBottom: 10}}>
           <Avatar src={productType?.imageSrc} sx={{width: 60, height: 60, mr: 1}}/>
-          {productType?.label}
+          <div className="gradient-text" style={{backgroundImage: productType?.gradient}}>
+            {productType?.label}
+          </div>
         </div>
         <Button startIcon={<Icon>add</Icon>} onClick={() => openDialog()}>
           Új étel/ital felvétele
         </Button>
       </div>
-      <Paper elevation={5} sx={{marginTop: '10px'}}>
+      <Paper elevation={5} sx={{marginTop: '10px', backgroundColor: 'transparent'}}>
         <DataGrid
           rows={products}
           columns={columns}

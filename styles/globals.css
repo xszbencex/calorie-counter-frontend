@@ -11,10 +11,19 @@
 html, body {
   padding: 0;
   margin: 0;
+  height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+body {
+  background-image: url("/green_background2.jpg");
+  background-color: white;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
 
 * {
   box-sizing: border-box;
@@ -24,6 +33,13 @@ html, body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.gradient-text {
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
 }
 
 .center {

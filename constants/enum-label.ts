@@ -13,16 +13,31 @@ export const genderOptions: EnumLabel[] = [
   {value: Gender.FEMALE, label: 'Nő'},
 ];
 
-export const productTypeOptions: (EnumLabel & {imageSrc: string})[] = [
-  {value: ProductType.PROTEIN, label: 'Fehérjék', imageSrc: '/hus.png'},
-  {value: ProductType.FRUITS, label: 'Gyümölcsök', imageSrc: '/gyumolcs.png'},
-  {value: ProductType.VEGETABLES, label: 'Zöldségek', imageSrc: '/zoldseg.png'},
-  {value: ProductType.GRAINS, label: 'Gabonafélék', imageSrc: '/gabona.png'},
-  {value: ProductType.DAIRY, label: 'Tejtermékek', imageSrc: '/tejtermek.png'},
-  {value: ProductType.SWEETS, label: 'Édességek', imageSrc: '/edesseg.png'},
-  {value: ProductType.MEAL, label: 'Kész ételek', imageSrc: '/keszetel.png'},
-  {value: ProductType.DRINK, label: 'Italok', imageSrc: '/ital.png'},
-  {value: ProductType.OTHERS, label: 'Egyéb', imageSrc: '/egyeb.png'},
+export type ProductOptionsProps = EnumLabel & {
+  imageSrc: string;
+  color: string;
+  gradient: string
+}
+
+export const productTypeOptions: ProductOptionsProps[] = [
+  {value: ProductType.PROTEIN, label: 'Fehérjék', imageSrc: '/hus.png', color: '#b34a02',
+    gradient: 'linear-gradient(90deg, #5e2301 0%, #f2965c 100%)'},
+  {value: ProductType.FRUITS, label: 'Gyümölcsök', imageSrc: '/gyumolcs.png', color: '#c02030',
+    gradient: 'linear-gradient(90deg, #fd511f 0%, #fdec6e 100%)'},
+  {value: ProductType.VEGETABLES, label: 'Zöldségek', imageSrc: '/zoldseg.png', color: '#6db94e',
+    gradient: 'linear-gradient(90deg, #317b29 0%, #a9ea6e 50%)'},
+  {value: ProductType.GRAINS, label: 'Gabonafélék', imageSrc: '/gabona.png', color: '#ecb86b',
+    gradient: 'linear-gradient(90deg, #bb5b14 0%, #d79f64 100%)'},
+  {value: ProductType.DAIRY, label: 'Tejtermékek', imageSrc: '/tejtermek.png', color: '#eac172',
+    gradient: 'linear-gradient(90deg, #fdb525 0%, #bbaf9d 100%)'},
+  {value: ProductType.SWEETS, label: 'Édességek', imageSrc: '/edesseg.png', color: '#6e4420',
+    gradient: 'linear-gradient(90deg, #281f06 0%, #b47e5e 100%)'},
+  {value: ProductType.MEAL, label: 'Kész ételek', imageSrc: '/keszetel.png', color: '#b84901',
+    gradient: 'linear-gradient(90deg, #973700 0%, #cd963b 100%)'},
+  {value: ProductType.DRINK, label: 'Italok', imageSrc: '/ital.png', color: '#fb8e03',
+    gradient: 'linear-gradient(90deg, #fd760e 0%, #f7e23d 100%)'},
+  {value: ProductType.OTHERS, label: 'Egyéb', imageSrc: '/egyeb.png', color: '#21a5b4',
+    gradient: 'linear-gradient(90deg, #21a5b4 0%, #7db23c 100%)'},
 ];
 
 export const unitOfMeasureOptions: (EnumLabel & {unit: string})[] = [

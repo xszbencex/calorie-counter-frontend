@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../../styles/header.module.css';
-import {Button} from '@mui/material';
+import {Button, Icon} from '@mui/material';
 import React, {useContext, useEffect, useRef} from 'react';
 import DrawerContext from '../../store/drawer-context';
 import {useKeycloak} from '@react-keycloak/ssr';
@@ -49,12 +49,12 @@ export const Header = () => {
                 <span style={{textTransform: 'capitalize', fontSize: 'large'}}>
                   {`${keycloak.tokenParsed?.family_name} ${keycloak.tokenParsed?.given_name}`}
                 </span>
-                <Button onClick={() => logout()} sx={{ml: 2}}>Kilépés</Button>
+                <Button onClick={() => logout()} sx={{ml: 2}} startIcon={<Icon>logout</Icon>}>Kilépés</Button>
               </>
             ): (
               <>
-                <Button onClick={() => register()}>Regisztrálás</Button>
-                <Button onClick={() => login()} sx={{ml: 2}}>Belépés</Button>
+                <Button onClick={() => register()} startIcon={<Icon>person_add</Icon>}>Regisztráció</Button>
+                <Button onClick={() => login()} sx={{ml: 2}} startIcon={<Icon>login</Icon>}>Belépés</Button>
               </>
             )}
           </div>

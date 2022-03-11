@@ -49,7 +49,7 @@ export const NutritionForm = (props: FormProps) => {
 
   useEffect(() => {
     getAllProductByUserId(globalContext.loggedInUserId!)
-      .then(response => setProducts(response))
+      .then(response => setProducts(response.sort((a, b) => a.productType > b.productType ? 1 : -1)))
       .catch(error => dialogContext.showRestCallErrorDialog(error));
   }, []);
 
@@ -116,7 +116,9 @@ export const NutritionForm = (props: FormProps) => {
                           src={productTypeOptions.find(value => value.value === params.group)?.imageSrc}
                         />
                       </ListItemAvatar>
-                      {productTypeOptions.find(value => value.value === params.group)?.label}
+                      <span style={{fontWeight: 'bold', color: productTypeOptions.find(value => value.value === params.group)?.color}}>
+                        {productTypeOptions.find(value => value.value === params.group)?.label}
+                      </span>
                     </ListItem>
                     {params.children}
                   </Fragment>

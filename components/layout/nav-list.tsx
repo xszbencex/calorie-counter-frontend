@@ -12,11 +12,15 @@ import DrawerContext from '../../store/drawer-context';
 const LinkItem = (props: { route: CCRoute, routerPath: string, subRoute?: boolean, drawerOpen?: boolean }) => {
   const {route, routerPath, subRoute, drawerOpen} = props;
   const padding: number = !subRoute ? 2 : drawerOpen ? 4 : 2;
+
   return (
     <Link href={route.path!} passHref>
       <a>
         <Tooltip title={drawerOpen ? '' : route.label} placement="right">
-          <ListItemButton selected={routerPath === route.path} sx={{pl: padding, transition: 'all 0.2s'}}>
+          <ListItemButton selected={routerPath === route.path} sx={{
+            pl: padding, transition: 'all 0.2s',
+
+          }}>
             <ListItemIcon>
               <Icon>{route.icon}</Icon>
             </ListItemIcon>

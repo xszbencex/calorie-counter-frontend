@@ -77,7 +77,7 @@ export default function Sidebar(props: { children: ReactElement }) {
   return (
     <Box sx={{
       marginLeft: open ? `${drawerWidth}px` : `calc(${theme.spacing(7)} + 1px)`,
-      transition: 'margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms'
+      transition: 'margin-left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
     }}>
       <Drawer
         sx={{
@@ -85,6 +85,7 @@ export default function Sidebar(props: { children: ReactElement }) {
             top: drawerContext.headerHeight,
             backgroundColor: primaryColor,
             color: 'white',
+            boxShadow: 'rgb(0 0 0 / 20%) 0px 20px 5px -1px, rgb(0 0 0 / 14%) 0 6px 10px 0, rgb(0 0 0 / 12%) 0 1px 18px 0',
             '&::-webkit-scrollbar': {
               width: 5,
             },
