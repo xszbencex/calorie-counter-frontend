@@ -2,7 +2,7 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Icon, I
 import {WeightChangeDTO} from '../../types/dto/WeightChangeDTO';
 import * as yup from 'yup';
 import {getNumberSchema} from '../../constants/common-schema';
-import {commonStrings} from '../../constants/common-strings';
+import {commonStrings} from '../../constants/common-values';
 import {CCFormText} from '../input-fields/CCText';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';

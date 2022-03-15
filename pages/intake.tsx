@@ -12,12 +12,13 @@ import DialogContext from '../store/dialog-context';
 import {unitOfMeasureOptions} from '../constants/enum-label';
 import {ProductType} from '../types/enum/ProductType';
 import {WaterIntakeForm} from '../components/forms/water-intake-form';
+import {localeStringFormatter} from '../constants/common-values';
 
 export default function IntakePage() {
   const nutrientIntakeColumns: GridColDef[] = [
     {
-      field: 'intakeDate', headerName: 'Étkezés napja', flex: 1,
-      valueGetter: params => new Date(params.row.intakeDate).toLocaleDateString()
+      field: 'intakeDate', headerName: 'Étkezés ideje', flex: 1,
+      valueGetter: params => new Date(params.row.intakeDate).toLocaleString([], localeStringFormatter)
     },
     {
       field: 'carbohydrate', headerName: 'Szénhidrát', flex: 1,
@@ -67,8 +68,8 @@ export default function IntakePage() {
 
   const waterIntakeColumns: GridColDef[] = [
     {
-      field: 'intakeDate', headerName: 'Ivás napja', flex: 1,
-      valueGetter: params => new Date(params.row.intakeDate).toLocaleDateString()
+      field: 'intakeDate', headerName: 'Ivás ideje', flex: 1,
+      valueGetter: params => new Date(params.row.intakeDate).toLocaleString([], localeStringFormatter)
     },
     {
       field: 'quantity', headerName: 'Mennyiség', flex: 1,
@@ -123,6 +124,7 @@ export default function IntakePage() {
       title: isUpdate ? 'Étkezés adatainak módosítása' : 'Új étkezés hozzáadása',
       formName: 'nutrient-intake-form',
       formComponent: <NutrientIntakeForm data={intake} onFormSubmit={formData => onNutrientIntakeSubmit(isUpdate, formData)}/>,
+      dialogProps: {maxWidth: 'sm'}
     });
   }
 
@@ -150,6 +152,7 @@ export default function IntakePage() {
       title: isUpdate ? 'Ivás adatainak módosítása' : 'Új ivás hozzáadása',
       formName: 'water-intake-form',
       formComponent: <WaterIntakeForm data={intake} onFormSubmit={formData => onWaterIntakeSubmit(isUpdate, formData)}/>,
+      dialogProps: {maxWidth: 'xs'}
     });
   }
 

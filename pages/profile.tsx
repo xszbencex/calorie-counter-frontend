@@ -1,5 +1,5 @@
 import {ClientForm} from '../components/forms/client-form';
-import {Button} from '@mui/material';
+import {Box, Button} from '@mui/material';
 import {ClientDTO} from '../types/dto/ClientDTO';
 import {useContext} from 'react';
 import GlobalContext from '../store/global-context';
@@ -23,9 +23,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div>
+    <Box sx={{maxWidth: 1000, mx: 'auto'}}>
       <ClientForm onFormSubmit={onSubmit}/>
       <Button type="submit" form="client-form">Mentés</Button>
-    </div>
+    </Box>
   );
 }

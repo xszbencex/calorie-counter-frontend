@@ -1,6 +1,6 @@
 .mainContainer {
-    margin-top: var(--header-height);
-    margin-bottom: 30px;
+    margin: var(--header-height) auto 30px auto;
     padding: 20px 20px 0;
     width: 100%;
+    max-width: 1920px;
 }

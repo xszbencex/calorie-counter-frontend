@@ -36,6 +36,7 @@ export function CCSpeedDial() {
       title: 'Étkezés hozzáadása',
       formName: 'nutrient-intake-form',
       formComponent: <NutrientIntakeForm onFormSubmit={formData => onNutrientIntakeSubmit(formData)}/>,
+      dialogProps: {maxWidth: 'sm'}
     });
   }
 
@@ -67,6 +68,7 @@ export function CCSpeedDial() {
       title: 'Víz fogyasztás felvétele',
       formName: 'water-intake-form',
       formComponent: <WaterIntakeForm onFormSubmit={formData => onWaterIntakeSubmit(formData)}/>,
+      dialogProps: {maxWidth: 'xs'}
     });
   }
 

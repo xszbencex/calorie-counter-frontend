@@ -82,14 +82,14 @@ export const GRID_HUN_LOCALE_TEXT: GridLocaleText = {
   columnHeaderSortIconLabel: 'Rendezés',
 
   // Rows selected footer text
-  footerRowSelected: (count) => `${count.toLocaleString()} kiválasztott sor`,
+  footerRowSelected: (count) => `${count} kiválasztott sor`,
 
   // Total rows footer text
   footerTotalRows: 'Sorok száma:',
 
   // Total visible rows footer text
   footerTotalVisibleRows: (visibleCount, totalCount) =>
-    `${visibleCount.toLocaleString()} a ${totalCount.toLocaleString()}-ből/ből`,
+    `${visibleCount} a ${totalCount}-ből/ből`,
 
   // Checkbox selection text
   checkboxSelectionHeaderName: 'Checkbox kiválasztás',

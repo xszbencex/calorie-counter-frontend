@@ -1,10 +1,10 @@
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useForm} from 'react-hook-form';
 import * as yup from 'yup';
-import {Button, Grid, InputAdornment, Paper} from '@mui/material';
+import {Button, Grid, InputAdornment} from '@mui/material';
 import {ClientDTO} from '../../types/dto/ClientDTO';
 import {BaseDTO} from '../../types/dto/BaseDTO';
-import {commonStrings} from '../../constants/common-strings';
+import {commonStrings} from '../../constants/common-values';
 import {FormProps} from '../../types/FormProps';
 import {CCFormText} from '../input-fields/CCText';
 import { CCFormSelect } from '../input-fields/CCSelect';
@@ -57,11 +57,11 @@ export const ClientForm = (props: FormProps) => {
       getAgeByBirthDate(getValues('birthDate')),
       getValues('gender'),
       getValues('physicalActivity')
-    )); // +- 500kcal fogyáshoz és testtömegnöveléshez 0,5 kg változás esetén hetente
+    )); // +- 500kcal fogyáshoz és testtömegnöveléshez 0,5 kg változás esetén hetente, fehérje és szénhidrát: 4 kcal, zsír: 9, 20-20-60 pl
   }
 
   return (
-    <Paper elevation={12} sx={{p: 3}}>
+    <>
       <form id="client-form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container rowSpacing={2} columnSpacing={2} marginBottom="20px">
           <Grid item xs={1}>
@@ -172,6 +172,6 @@ export const ClientForm = (props: FormProps) => {
           </Grid>
         </Grid>
       </form>
-    </Paper>
+    </>
   );
 };

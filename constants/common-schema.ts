@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import {commonStrings} from './common-strings';
+import {commonStrings} from './common-values';
 
 export function getNumberSchema(min: number, max: number) {
   const numberRangeErrorMessage = `${min}-${max} közötti számot adjon meg`;

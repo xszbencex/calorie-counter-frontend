@@ -2,15 +2,15 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {useForm} from 'react-hook-form';
 import * as yup from 'yup';
 import {Grid, InputAdornment} from '@mui/material';
-import {commonStrings} from '../../constants/common-strings';
+import {commonStrings} from '../../constants/common-values';
 import {FormProps} from '../../types/FormProps';
 import {CCFormText} from '../input-fields/CCText';
 import {unitOfMeasureOptions} from '../../constants/enum-label';
 import {UnitOfMeasure} from '../../types/enum/UnitOfMeasure';
-import {CCFormDate} from '../input-fields/CCDate';
 import {getDateSchema, getNumberSchema} from '../../constants/common-schema';
 import moment from 'moment';
 import {WaterIntakeRequest} from '../../types/request/WaterIntakeRequest';
+import {CCFormDateTime} from '../input-fields/CCDateTime';
 
 type FormData = WaterIntakeRequest;
 
@@ -41,10 +41,10 @@ export const WaterIntakeForm = (props: FormProps) => {
     <>
       <form id="water-intake-form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container rowSpacing={2} columnSpacing={2} marginBottom="20px">
-          <Grid item xs={3}>
-            <CCFormDate name="intakeDate" control={control} label="Ivás napja *" datePickerProps={{maxDate: moment()}}/>
+          <Grid item xs={6}>
+            <CCFormDateTime name="intakeDate" control={control} label="Ivás ideje *" dateTimePickerProps={{maxDate: moment()}}/>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={6}>
             <CCFormText
               name="quantity"
               control={control}
@@ -59,7 +59,7 @@ export const WaterIntakeForm = (props: FormProps) => {
               }}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <CCFormText
               name="comment"
               control={control}
@@ -67,7 +67,7 @@ export const WaterIntakeForm = (props: FormProps) => {
               textFieldProps={{
                 variant: 'outlined',
                 multiline: true,
-                rows: 3
+                rows: 2
               }}
             />
           </Grid>

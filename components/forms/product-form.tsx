@@ -3,7 +3,7 @@ import {useForm} from 'react-hook-form';
 import * as yup from 'yup';
 import {Grid, InputAdornment} from '@mui/material';
 import {BaseDTO} from '../../types/dto/BaseDTO';
-import {commonStrings} from '../../constants/common-strings';
+import {commonStrings} from '../../constants/common-values';
 import {FormProps} from '../../types/FormProps';
 import {CCFormText} from '../input-fields/CCText';
 import { CCFormSelect } from '../input-fields/CCSelect';
@@ -75,7 +75,7 @@ export const ProductForm = (props: FormProps) => {
           <Grid item xs={3}>
             <CCFormSelect name="unitOfMeasure" control={control} label="Mértékegység *" options={unitOfMeasureOptions}/>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <CCFormText
               name="carbohydrate"
               control={control}
@@ -88,7 +88,7 @@ export const ProductForm = (props: FormProps) => {
               }}
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <CCFormText
               name="protein"
               control={control}
@@ -101,7 +101,7 @@ export const ProductForm = (props: FormProps) => {
               }}
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <CCFormText
               name="fat"
               control={control}
@@ -114,7 +114,7 @@ export const ProductForm = (props: FormProps) => {
               }}
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <CCFormText
               name="calorie"
               control={control}
@@ -127,7 +127,7 @@ export const ProductForm = (props: FormProps) => {
               }}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <CCFormText
               name="comment"
               control={control}
@@ -135,7 +135,7 @@ export const ProductForm = (props: FormProps) => {
               textFieldProps={{
                 variant: 'outlined',
                 multiline: true,
-                rows: 3
+                rows: 2
               }}
             />
           </Grid>

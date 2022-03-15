@@ -26,9 +26,9 @@ export const CCFormDateTime = (
               }
             }}
             label={label}
-            views={dateTimePickerProps?.views ?? ['day', 'hours', 'minutes', 'seconds']}
-            inputFormat={dateTimePickerProps?.inputFormat ?? 'yyyy.MM.DD. HH:mm:ss'}
-            mask={dateTimePickerProps?.mask ?? '____.__.__. __:__:__'}
+            views={dateTimePickerProps?.views ?? ['day', 'hours', 'minutes']}
+            inputFormat={dateTimePickerProps?.inputFormat ?? 'yyyy.MM.DD. HH:mm'}
+            mask={dateTimePickerProps?.mask ?? '____.__.__. __:__'}
             renderInput={(params) =>
               <TextField
                 {...params}

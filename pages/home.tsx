@@ -10,6 +10,7 @@ import DialogContext from '../store/dialog-context';
 import {ProductType} from '../types/enum/ProductType';
 import {unitOfMeasureOptions} from '../constants/enum-label';
 import {primaryColor} from '../constants/stlyes';
+import {localeStringFormatter} from '../constants/common-values';
 
 export default function HomePage() {
   const globalContext = useContext(GlobalContext);
@@ -89,14 +90,15 @@ export default function HomePage() {
         )}
       </Grid>
       <Grid container columnSpacing={10} rowSpacing={6}>
-        <Grid item xs={12} md={8} sx={{textAlign: 'center'}}>
-          <h1 style={{fontFamily: 'cursive'}}>Napi tápanyag tételek</h1>
+        <Grid item xs={12} md={8}>
+          <h1 style={{fontFamily: 'cursive', textAlign: 'center'}}>Napi tápanyag tételek</h1>
           <div>
             {dailyNutrientIntakes?.map((intake, index) => (
               <div key={index} style={{backgroundColor: primaryColor, color: 'white', borderRadius: 10, padding: 10,
                 boxShadow: '0.25rem 0.25rem 0.6rem rgba(0,0,0,0.05), 0 0.5rem 1.125rem rgba(75,0,0,0.05)', fontSize: 'larger',
               }}>
-                {`${intake.product
+                {new Date(intake.intakeDate).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}
+                {` ${intake.product
                   ? `${intake.quantity} ${unitOfMeasureOptions.find(value => value.value === intake.product.unitOfMeasure)?.unit} ` +
                   intake.product.name
                   : 'Egyéb'} `}
@@ -108,13 +110,14 @@ export default function HomePage() {
             ))}
           </div>
         </Grid>
-        <Grid item xs={12} md={4} sx={{textAlign: 'center'}}>
-          <h1 style={{fontFamily: 'cursive'}}>Napi folyadék tételek</h1>
+        <Grid item xs={12} md={4}>
+          <h1 style={{fontFamily: 'cursive', textAlign: 'center'}}>Napi folyadék tételek</h1>
           <div>
             {dailyWaterIntakes?.map((intake, index) => (
               <div key={index} style={{backgroundColor: '#029ffa', color: 'white', borderRadius: 10, padding: 10, marginBottom: 10,
                 boxShadow: '0.25rem 0.25rem 0.6rem rgba(0,0,0,0.05), 0 0.5rem 1.125rem rgba(75,0,0,0.05)', fontSize: 'larger',
               }}>
+                {new Date(intake.intakeDate).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}
                 {intake.quantity} ml
               </div>
             ))}

@@ -2,7 +2,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {useForm} from 'react-hook-form';
 import * as yup from 'yup';
 import {Grid, InputAdornment} from '@mui/material';
-import {commonStrings} from '../../constants/common-strings';
+import {commonStrings} from '../../constants/common-values';
 import {FormProps} from '../../types/FormProps';
 import {CCFormText} from '../input-fields/CCText';
 import {CCFormDate} from '../input-fields/CCDate';

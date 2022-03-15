@@ -3,7 +3,7 @@ import {useForm} from 'react-hook-form';
 import * as yup from 'yup';
 import {Avatar, Button, Grid, InputAdornment, ListItem, ListItemAvatar} from '@mui/material';
 import {BaseDTO} from '../../types/dto/BaseDTO';
-import {commonStrings} from '../../constants/common-strings';
+import {commonStrings} from '../../constants/common-values';
 import {FormProps} from '../../types/FormProps';
 import {CCFormText} from '../input-fields/CCText';
 import {IntakeDTO} from '../../types/dto/IntakeDTO';
@@ -18,6 +18,7 @@ import {CCFormDate} from '../input-fields/CCDate';
 import {getDateSchema, getNumberSchema} from '../../constants/common-schema';
 import moment from 'moment';
 import DialogContext from '../../store/dialog-context';
+import {CCFormDateTime} from '../input-fields/CCDateTime';
 
 type FormData = Omit<IntakeDTO, keyof BaseDTO>
 
@@ -95,10 +96,10 @@ export const NutrientIntakeForm = (props: FormProps) => {
     <>
       <form id="nutrient-intake-form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container rowSpacing={2} columnSpacing={2} marginBottom="20px">
-          <Grid item xs={3}>
-            <CCFormDate name="intakeDate" control={control} label="Étkezés napja *" datePickerProps={{maxDate: moment()}}/>
+          <Grid item xs={4.1}>
+            <CCFormDateTime name="intakeDate" control={control} label="Étkezés ideje *" dateTimePickerProps={{maxDate: moment()}}/>
           </Grid>
-          <Grid item xs={5.5}>
+          <Grid item xs={5.4}>
             <CCFormAutocomplete
               name="product"
               control={control}
@@ -112,7 +113,6 @@ export const NutrientIntakeForm = (props: FormProps) => {
                     <ListItem sx={{pl: 1, opacity: 0.8}}>
                       <ListItemAvatar>
                         <Avatar
-                          alt={params.key}
                           src={productTypeOptions.find(value => value.value === params.group)?.imageSrc}
                         />
                       </ListItemAvatar>
@@ -127,7 +127,7 @@ export const NutrientIntakeForm = (props: FormProps) => {
             />
           </Grid>
           {product && (
-            <Grid item xs={1.5}>
+            <Grid item xs={2.5}>
               <CCFormText
                 name="quantity"
                 control={control}
@@ -143,10 +143,7 @@ export const NutrientIntakeForm = (props: FormProps) => {
               />
             </Grid>
           )}
-          <Grid item xs={2}>
-            {isUpdate && product && quantity && <Button onClick={() => refreshNutrients()}>Kiszámítás</Button>}
-          </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <CCFormText
               name="carbohydrate"
               control={control}
@@ -159,7 +156,7 @@ export const NutrientIntakeForm = (props: FormProps) => {
               }}
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <CCFormText
               name="protein"
               control={control}
@@ -172,7 +169,7 @@ export const NutrientIntakeForm = (props: FormProps) => {
               }}
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <CCFormText
               name="fat"
               control={control}
@@ -185,7 +182,7 @@ export const NutrientIntakeForm = (props: FormProps) => {
               }}
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <CCFormText
               name="calorie"
               control={control}
@@ -198,7 +195,7 @@ export const NutrientIntakeForm = (props: FormProps) => {
               }}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <CCFormText
               name="comment"
               control={control}
@@ -206,7 +203,7 @@ export const NutrientIntakeForm = (props: FormProps) => {
               textFieldProps={{
                 variant: 'outlined',
                 multiline: true,
-                rows: 3
+                rows: 2
               }}
             />
           </Grid>

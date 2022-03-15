@@ -38,7 +38,7 @@ export const Header = () => {
           <div className={styles.logo}>
             <Link href={'/'} passHref>
               <a>
-                <Image src={'/logo2 copy.png'} width={80} height={60} alt={'Logo'}/>
+                <Image src={'/logo_white.png'} width={80} height={60} alt={'Logo'}/>
               </a>
             </Link>
           </div>
