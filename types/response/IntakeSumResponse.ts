@@ -1,5 +1,5 @@
-export type NutritionSumResponse = {
-  nutritionDate: Date | string;
+export type IntakeSumResponse = {
+  intakeDate: Date | string;
   carbohydrateSum: number;
   proteinSum: number;
   fatSum: number;

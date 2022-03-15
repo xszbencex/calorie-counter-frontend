@@ -6,7 +6,7 @@ import React, {useContext, useEffect, useRef} from 'react';
 import DrawerContext from '../../store/drawer-context';
 import {useKeycloak} from '@react-keycloak/ssr';
 import {CCKecyloakInstance} from '../../types/CCKecyloakInstance';
-import {primaryColor} from '../../constants/colors';
+import {primaryColor} from '../../constants/stlyes';
 
 export const Header = () => {
   const drawerContext = useContext(DrawerContext);

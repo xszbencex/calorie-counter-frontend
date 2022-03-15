@@ -8,7 +8,9 @@ export default function StatisticsPage() {
       <Head>
         <title>Kalóriaszámláló - Kimutatások</title>
       </Head>
+      <h1>Súly változás</h1>
       <WeighChangeChart/>
+      <h1>Havi kimutatás</h1>
       <MonthlyReviewChart/>
     </>
   );

@@ -4,7 +4,7 @@ import {WeightChangeDTO} from '../../types/dto/WeightChangeDTO';
 import GlobalContext from '../../store/global-context';
 import DialogContext from '../../store/dialog-context';
 import {CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from 'recharts';
-import {primaryColor} from '../../constants/colors';
+import {primaryColor} from '../../constants/stlyes';
 import {WeightChangeDialog} from '../dialogs/weight-change-dialog';
 import {deleteArrayElement, modifyArrayElement} from '../../utils/common-functions';
 
@@ -39,7 +39,10 @@ export function WeighChangeChart() {
         .catch(error => dialogContext.showRestCallErrorDialog(error));
     } else if (action === 'update') {
       updateWeightChange(weightChange!, weightChange?.id!)
-        .then(response => modifyArrayElement({...response, setDate: weightChange?.setDate}, setWeightChanges))
+        .then(response => modifyArrayElement({
+          ...response,
+          setDate: new Date(weightChange?.setDate!).toISOString().substring(0, 10)
+        }, setWeightChanges))
         .catch(error => dialogContext.showRestCallErrorDialog(error));
     }
     setDialogData(undefined);

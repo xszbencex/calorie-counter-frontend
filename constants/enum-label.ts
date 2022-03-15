@@ -36,7 +36,7 @@ export const productTypeOptions: ProductOptionsProps[] = [
     gradient: 'linear-gradient(90deg, #973700 0%, #cd963b 100%)'},
   {value: ProductType.DRINK, label: 'Italok', imageSrc: '/ital.png', color: '#fb8e03',
     gradient: 'linear-gradient(90deg, #fd760e 0%, #f7e23d 100%)'},
-  {value: ProductType.OTHERS, label: 'Egyéb', imageSrc: '/egyeb.png', color: '#21a5b4',
+  {value: ProductType.OTHERS, label: 'Egyebek', imageSrc: '/egyeb.png', color: '#21a5b4',
     gradient: 'linear-gradient(90deg, #21a5b4 0%, #7db23c 100%)'},
 ];
 

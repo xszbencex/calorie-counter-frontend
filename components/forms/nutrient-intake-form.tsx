@@ -6,7 +6,7 @@ import {BaseDTO} from '../../types/dto/BaseDTO';
 import {commonStrings} from '../../constants/common-strings';
 import {FormProps} from '../../types/FormProps';
 import {CCFormText} from '../input-fields/CCText';
-import {NutritionDTO} from '../../types/dto/NutritionDTO';
+import {IntakeDTO} from '../../types/dto/IntakeDTO';
 import {CCFormAutocomplete} from '../input-fields/CCAutocomplete';
 import {Fragment, useContext, useEffect, useState} from 'react';
 import {ProductDTO} from '../../types/dto/ProductDTO';
@@ -19,14 +19,14 @@ import {getDateSchema, getNumberSchema} from '../../constants/common-schema';
 import moment from 'moment';
 import DialogContext from '../../store/dialog-context';
 
-type FormData = Omit<NutritionDTO, keyof BaseDTO>
+type FormData = Omit<IntakeDTO, keyof BaseDTO>
 
 const defaultFormValues = {
-  nutritionDate: new Date()
+  intakeDate: new Date()
 } as FormData;
 
 const schema = yup.object({
-  nutritionDate: getDateSchema().max(moment().add(1, 's'), 'Jövőbeli érték nem adható meg.').required(commonStrings.required),
+  intakeDate: getDateSchema().max(moment().add(1, 's'), 'Jövőbeli érték nem adható meg.').required(commonStrings.required),
   carbohydrate: getNumberSchema(0, 10000).required(commonStrings.required),
   protein: getNumberSchema(0, 10000).required(commonStrings.required),
   fat: getNumberSchema(0, 10000).required(commonStrings.required),
@@ -36,7 +36,7 @@ const schema = yup.object({
   comment: yup.string().nullable(),
 });
 
-export const NutritionForm = (props: FormProps) => {
+export const NutrientIntakeForm = (props: FormProps) => {
   const {data, onFormSubmit} = props;
   const isUpdate = !!data;
 
@@ -93,10 +93,10 @@ export const NutritionForm = (props: FormProps) => {
 
   return (
     <>
-      <form id="nutrition-form" onSubmit={handleSubmit(onSubmit)}>
+      <form id="nutrient-intake-form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container rowSpacing={2} columnSpacing={2} marginBottom="20px">
           <Grid item xs={3}>
-            <CCFormDate name="nutritionDate" control={control} label="Étkezés napja *" datePickerProps={{maxDate: moment()}}/>
+            <CCFormDate name="intakeDate" control={control} label="Étkezés napja *" datePickerProps={{maxDate: moment()}}/>
           </Grid>
           <Grid item xs={5.5}>
             <CCFormAutocomplete

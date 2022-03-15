@@ -1,7 +1,7 @@
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useForm} from 'react-hook-form';
 import * as yup from 'yup';
-import {Button, Grid, InputAdornment} from '@mui/material';
+import {Button, Grid, InputAdornment, Paper} from '@mui/material';
 import {ClientDTO} from '../../types/dto/ClientDTO';
 import {BaseDTO} from '../../types/dto/BaseDTO';
 import {commonStrings} from '../../constants/common-strings';
@@ -61,7 +61,7 @@ export const ClientForm = (props: FormProps) => {
   }
 
   return (
-    <>
+    <Paper elevation={12} sx={{p: 3}}>
       <form id="client-form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container rowSpacing={2} columnSpacing={2} marginBottom="20px">
           <Grid item xs={1}>
@@ -172,6 +172,6 @@ export const ClientForm = (props: FormProps) => {
           </Grid>
         </Grid>
       </form>
-    </>
+    </Paper>
   );
 };

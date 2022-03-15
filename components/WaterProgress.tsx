@@ -51,17 +51,12 @@ export function WaterProgress(props: {target: number, current?: number, children
 
   return (
     <div style={{display: 'inline-flex', width: 100, position: 'relative'}}>
-      <div style={{
-        display: 'flex',
-        position: 'absolute', top: '0', left: '0', right: 0, bottom: 0,
-        textAlign: 'center',
-        alignItems: 'center',
-        justifyContent: 'center'}}>
+      <div className="progress-text-container">
         {children}
       </div>
       <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 51">
         <defs>
-          <mask id="milk-mask">
+          <mask id="water-mask">
             <Water fill="#029ffa" x="477" y="108" width="15" height="400" transform="rotate(-180 247.5 78.5)"/>
           </mask>
         </defs>
@@ -74,7 +69,7 @@ export function WaterProgress(props: {target: number, current?: number, children
           ' 3.72 0 0 1 .88-.06h4.82v2.79l4.06 12.71a10.67 10.67 0 0 1 .44 2.73z'}
           fill={getColorByProgress()}
         />
-        <path className="milk" mask="url(#milk-mask)" d="M4.7 46.5v-23l4-14h4l4 14v23" fill="#029ffa"/>
+        <path mask="url(#water-mask)" d="M4.7 46.5v-23l4-14h4l4 14v23" fill="#029ffa"/>
       </svg>
     </div>
   );

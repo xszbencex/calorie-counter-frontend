@@ -3,7 +3,17 @@ import cookie from 'cookie';
 import type {AppContext, AppProps} from 'next/app';
 import Head from 'next/head';
 import {createTheme, ThemeProvider} from '@mui/material';
-import {green, primaryColor, primaryDarkColor, secondary, white} from '../constants/colors';
+import {
+  green,
+  lgBreakpoint,
+  mdBreakpoint,
+  primaryColor,
+  primaryDarkColor,
+  secondary,
+  smBreakpoint,
+  white, xlBreakpoint,
+  xsBreakpoint
+} from '../constants/stlyes';
 import 'moment/locale/hu';
 import moment from 'moment';
 import DateAdapter from '@mui/lab/AdapterMoment';
@@ -56,6 +66,15 @@ function MyApp({Component, pageProps, cookies}: AppProps & { cookies: unknown })
               }
             },
           }
+        }
+      },
+      breakpoints: {
+        values: {
+          xs: xsBreakpoint,
+          sm: smBreakpoint,
+          md: mdBreakpoint,
+          lg: lgBreakpoint,
+          xl: xlBreakpoint
         }
       }
     },

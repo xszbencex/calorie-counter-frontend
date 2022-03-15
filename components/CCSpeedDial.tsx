@@ -1,13 +1,18 @@
 import {Icon, SpeedDial, SpeedDialAction, SpeedDialIcon} from '@mui/material';
-import {NutritionDTO} from '../types/dto/NutritionDTO';
-import {NutritionForm} from './forms/nutrition-form';
-import {createNutrition} from '../utils/api/nutrition-api';
+import {IntakeDTO} from '../types/dto/IntakeDTO';
+import {NutrientIntakeForm} from './forms/nutrient-intake-form';
+import {createIntake, createWaterIntake} from '../utils/api/intake-api';
 import {ReactElement, useContext} from 'react';
 import DialogContext from '../store/dialog-context';
 import GlobalContext from '../store/global-context';
 import {ProductDTO} from '../types/dto/ProductDTO';
 import {ProductForm} from './forms/product-form';
 import {createProduct} from '../utils/api/product-api';
+import {WaterIntakeForm} from './forms/water-intake-form';
+import {WaterIntakeRequest} from '../types/request/WaterIntakeRequest';
+import {WeightChangeDTO} from '../types/dto/WeightChangeDTO';
+import {WeightChangeForm} from './forms/weight-change-form';
+import {createWeightChange} from '../utils/api/weight-change-api';
 
 type Actions = {
   tooltip: string,
@@ -18,22 +23,24 @@ type Actions = {
 export function CCSpeedDial() {
   const speedDialActions: Actions[] = [
     {tooltip: 'Termék felvétele', icon: <Icon>add_shopping_cart</Icon>, onClick: openProductDialog},
-    {tooltip: 'Étekezés hozzáadása', icon: <Icon>local_dining</Icon>, onClick: openNutritionDialog}
+    {tooltip: 'Étekezés hozzáadása', icon: <Icon>local_dining</Icon>, onClick: openNutrientIntakeDialog},
+    {tooltip: 'Ivás hozzáadása', icon: <Icon>bloodtype</Icon>, onClick: openWaterIntakeDialog},
+    {tooltip: 'Súly változás naplózása', icon: <Icon>fitness_center</Icon>, onClick: openWeightChangeDialog},
   ];
 
   const globalContext = useContext(GlobalContext);
   const dialogContext = useContext(DialogContext);
 
-  function openNutritionDialog() {
+  function openNutrientIntakeDialog() {
     dialogContext.openFormDialog({
-      title: 'Új étkezés hozzáadása',
-      formName: 'nutrition-form',
-      formComponent: <NutritionForm onFormSubmit={formData => onNutritionSubmit(formData)}/>,
+      title: 'Étkezés hozzáadása',
+      formName: 'nutrient-intake-form',
+      formComponent: <NutrientIntakeForm onFormSubmit={formData => onNutrientIntakeSubmit(formData)}/>,
     });
   }
 
-  const onNutritionSubmit = (formData: NutritionDTO) => {
-      createNutrition(formData)
+  const onNutrientIntakeSubmit = (formData: IntakeDTO) => {
+      createIntake(formData)
         .then(() => {
           dialogContext.closeFormDialog();
           globalContext.refreshDailyProgress();
@@ -51,6 +58,38 @@ export function CCSpeedDial() {
 
   const onProductSubmit = (formData: ProductDTO) => {
     createProduct(formData)
+      .then(() => dialogContext.closeFormDialog())
+      .catch(error => dialogContext.showRestCallErrorDialog(error));
+  };
+
+  function openWaterIntakeDialog() {
+    dialogContext.openFormDialog({
+      title: 'Víz fogyasztás felvétele',
+      formName: 'water-intake-form',
+      formComponent: <WaterIntakeForm onFormSubmit={formData => onWaterIntakeSubmit(formData)}/>,
+    });
+  }
+
+  const onWaterIntakeSubmit = (formData: WaterIntakeRequest) => {
+    createWaterIntake(formData)
+      .then(() => {
+        dialogContext.closeFormDialog();
+        globalContext.refreshDailyProgress();
+      })
+      .catch(error => dialogContext.showRestCallErrorDialog(error));
+  };
+
+  function openWeightChangeDialog() {
+    dialogContext.openFormDialog({
+      title: 'Súly változás naplózása',
+      formName: 'weight-change-form',
+      formComponent: <WeightChangeForm onFormSubmit={formData => onWeightChangeSubmit(formData)}/>,
+      dialogProps: {maxWidth: 'xs'}
+    });
+  }
+
+  const onWeightChangeSubmit = (formData: WeightChangeDTO) => {
+    createWeightChange(formData)
       .then(() => dialogContext.closeFormDialog())
       .catch(error => dialogContext.showRestCallErrorDialog(error));
   };

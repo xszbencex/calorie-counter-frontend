@@ -5,15 +5,15 @@ import {KeycloakInstance} from 'keycloak-js';
 import {getClientByUserId} from '../utils/api/client-api';
 import {useRouter} from 'next/router';
 import DialogContext from './dialog-context';
-import {NutritionSumResponse} from '../types/response/NutritionSumResponse';
-import {getNutritionSumByDate} from '../utils/api/nutrition-api';
+import {IntakeSumResponse} from '../types/response/IntakeSumResponse';
+import {getIntakeSumByDate} from '../utils/api/intake-api';
 
 type GlobalContextType = {
   setClient: (client: ClientDTO) => void
   client?: ClientDTO,
   loggedInUserId?: string,
   refreshDailyProgress: () => void,
-  dailyProgress?: NutritionSumResponse
+  dailyProgress?: IntakeSumResponse
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -27,7 +27,7 @@ export function GlobalContextProvider(props: { children: ReactNode }) {
   const router = useRouter();
   const [client, setClient] = useState<ClientDTO>();
   const [loggedInUserId, setLoggedInUserId] = useState<string>('');
-  const [dailyProgress, setDailyProgress] = useState<NutritionSumResponse>();
+  const [dailyProgress, setDailyProgress] = useState<IntakeSumResponse>();
 
   useEffect(() => {
     if (keycloak?.authenticated) {
@@ -41,7 +41,7 @@ export function GlobalContextProvider(props: { children: ReactNode }) {
   }, [keycloak]);
 
   function refreshDailyProgress() {
-    getNutritionSumByDate(new Date().toLocaleDateString())
+    getIntakeSumByDate(new Date().toLocaleDateString())
       .then(response => setDailyProgress(response))
       .catch(error => dialogContext.showRestCallErrorDialog(error));
   }

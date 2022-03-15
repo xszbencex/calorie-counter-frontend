@@ -14,7 +14,7 @@ export function NutrientsProgress(props: {target?: number, current?: number, chi
   }, []);*/
 
   const styleProps = {
-    size: 200,
+    size: 250,
     thickness: 3
   };
 
@@ -45,10 +45,7 @@ export function NutrientsProgress(props: {target?: number, current?: number, chi
       <CircularProgress
         {...styleProps}
         variant="determinate"
-        sx={{
-          color: (theme) =>
-            theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
-        }}
+        sx={{color: '#e7e7e7'}}
         value={100}
       />
       <CircularProgress
@@ -65,19 +62,8 @@ export function NutrientsProgress(props: {target?: number, current?: number, chi
         }}
         value={progress > 100 ? 100 : progress}
       />
-      <Box
-        sx={{
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          position: 'absolute',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography component="div" color="text.secondary" sx={{textAlign: 'center'}}>
+      <Box className="progress-text-container">
+        <Typography component="div" color="text.secondary" sx={{fontSize: 'x-large'}}>
           {children}
         </Typography>
       </Box>

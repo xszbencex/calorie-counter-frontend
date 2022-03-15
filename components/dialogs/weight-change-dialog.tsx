@@ -28,7 +28,7 @@ export function WeightChangeDialog({weightChange, onClose}: WeightChangeDialogPr
   }, [weightChange]);
 
   function onSubmit(formData: {weight: number}) {
-    onClose('update', {...weightChange!, weight: formData.weight});
+    onClose('update', {...weightChange!, weight: formData.weight, setDate: new Date(weightChange?.setDate!).toISOString()});
   }
 
   return (

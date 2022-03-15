@@ -1,9 +1,9 @@
 import {BaseDTO} from './BaseDTO';
 import {ProductDTO} from './ProductDTO';
 
-export type NutritionDTO = BaseDTO & {
+export type IntakeDTO = BaseDTO & {
   userId: string;
-  nutritionDate: Date;
+  intakeDate: Date;
   carbohydrate: number;
   protein: number;
   fat: number;
