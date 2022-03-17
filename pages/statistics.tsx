@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import {MonthlyReviewChart} from '../components/charts/MonthlyReviewChart';
 import {WeighChangeChart} from '../components/charts/WeighChangeChart';
+import {primaryColor} from '../constants/stlyes';
 
 export default function StatisticsPage() {
   return (
@@ -8,9 +9,9 @@ export default function StatisticsPage() {
       <Head>
         <title>Kalóriaszámláló - Kimutatások</title>
       </Head>
-      <h1>Súly változás</h1>
+      <h1 style={{textAlign: 'center', fontFamily: 'cursive', color: primaryColor}}>Súly változás</h1>
       <WeighChangeChart/>
-      <h1>Havi kimutatás</h1>
+      <h1 style={{textAlign: 'center', fontFamily: 'cursive', marginTop: 40, color: primaryColor}}>Havi kimutatások</h1>
       <MonthlyReviewChart/>
     </>
   );

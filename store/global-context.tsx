@@ -37,6 +37,7 @@ export function GlobalContextProvider(props: { children: ReactNode }) {
         .catch(error => {
           error.code === '201' ? router.push('/profile') : dialogContext.showRestCallErrorDialog(error);
         });
+      refreshDailyProgress();
     }
   }, [keycloak]);
 

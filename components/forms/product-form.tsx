@@ -34,7 +34,7 @@ const schema = yup.object({
   calorie: getNumberSchema(0, 10000).integer(commonStrings.integerError).required(commonStrings.required),
   productType: yup.string().required(commonStrings.required),
   unitOfMeasure: yup.string().required(commonStrings.required),
-  comment: yup.string(),
+  comment: yup.string().nullable(),
 });
 
 export const ProductForm = (props: FormProps) => {

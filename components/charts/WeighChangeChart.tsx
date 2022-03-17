@@ -3,7 +3,7 @@ import {deleteWeightChange, getAllWeightChangeByUserId, updateWeightChange} from
 import {WeightChangeDTO} from '../../types/dto/WeightChangeDTO';
 import GlobalContext from '../../store/global-context';
 import DialogContext from '../../store/dialog-context';
-import {CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from 'recharts';
+import {CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
 import {primaryColor} from '../../constants/stlyes';
 import {WeightChangeDialog} from '../dialogs/weight-change-dialog';
 import {deleteArrayElement, modifyArrayElement} from '../../utils/common-functions';
@@ -50,19 +50,19 @@ export function WeighChangeChart() {
 
   return (
     <>
-      <LineChart
-        width={730} height={250} data={weightChanges}
-        margin={{top: 5, right: 30, left: 20, bottom: 5}}
-      >
-        <CartesianGrid strokeDasharray="3 3"/>
-        <XAxis dataKey="setDate"/>
-        <YAxis dataKey="weight"/>
-        <Tooltip/>
-        <Legend/>
-        <Line
-          type="monotone" dataKey="weight" stroke={primaryColor} name="Súly (kg)"
-          activeDot={{r: 7, onClick: (_, event: any) => openDialog(event.payload)}}/>
-      </LineChart>
+      <ResponsiveContainer width="100%" height={250}>
+        <LineChart data={weightChanges}
+        >
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis dataKey="setDate"/>
+          <YAxis dataKey="weight"/>
+          <Tooltip/>
+          <Legend/>
+          <Line
+            type="monotone" dataKey="weight" stroke={primaryColor} name="Súly (kg)"
+            activeDot={{r: 7, onClick: (_, event: any) => openDialog(event.payload)}}/>
+        </LineChart>
+      </ResponsiveContainer>
       <WeightChangeDialog weightChange={dialogData} onClose={closeDialog}/>
     </>
   );

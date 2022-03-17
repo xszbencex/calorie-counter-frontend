@@ -55,7 +55,7 @@ export const CCFormSelect = (
                    fieldState: {error}
                  }) => (
           <>
-            <InputLabel error={!!error}>{label}</InputLabel>
+            <InputLabel error={!!error} id="select-label">{label}</InputLabel>
             <Select
               {...selectProps}
               onChange={e => {
@@ -67,6 +67,8 @@ export const CCFormSelect = (
               value={value === null || value === undefined || options?.length === 0 ? nullValue : value}
               error={!!error}
               multiple={multiple}
+              labelId="select-label"
+              label={label}
               {...optionalRenderValueProp}
             >
               {clearable && !multiple && (
@@ -125,12 +127,14 @@ export const CCControlledSelect = (
       variant={formControlProps?.variant ?? 'standard'}
       fullWidth={formControlProps?.fullWidth ?? true}
     >
-      <InputLabel>{label}</InputLabel>
+      <InputLabel id="select-label">{label}</InputLabel>
       <Select
         {...selectProps}
         onChange={onChange}
         value={value}
         multiple={multiple}
+        labelId="select-label"
+        label={label}
         {...optionalRenderValueProp}
       >
         {clearable && !multiple && (

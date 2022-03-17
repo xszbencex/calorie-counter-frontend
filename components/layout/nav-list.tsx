@@ -1,13 +1,15 @@
 import {routes, CCRoute} from '../../constants/routes';
 import Link from 'next/link';
-import {Collapse, ListItemButton, ListItemIcon, Tooltip} from '@mui/material';
+import {Box, Collapse, ListItem, ListItemButton, ListItemIcon, Tooltip} from '@mui/material';
 import Icon from '@mui/material/Icon';
 import ListItemText from '@mui/material/ListItemText';
-import {ExpandLess, ExpandMore} from '@mui/icons-material';
 import List from '@mui/material/List';
 import {useRouter} from 'next/router';
-import {Fragment, useContext, useState} from 'react';
+import {useContext, useState} from 'react';
 import DrawerContext from '../../store/drawer-context';
+import {NutrientsProgress} from '../NutrientsProgress';
+import {WaterProgress} from '../WaterProgress';
+import GlobalContext from '../../store/global-context';
 
 const LinkItem = (props: { route: CCRoute, routerPath: string, subRoute?: boolean, drawerOpen?: boolean }) => {
   const {route, routerPath, subRoute, drawerOpen} = props;
@@ -32,47 +34,129 @@ const LinkItem = (props: { route: CCRoute, routerPath: string, subRoute?: boolea
   );
 };
 
+const DailyProgress = (props: {drawerOpen?: boolean }) => {
+  const {drawerOpen} = props;
+  const globalContext = useContext(GlobalContext);
+
+  return (
+    <>
+      {globalContext.client?.targetCalories && (
+        <ListItem sx={{justifyContent: 'center'}}>
+          <NutrientsProgress
+            target={globalContext.client?.targetCalories} current={globalContext.dailyProgress?.calorieSum}
+            size={drawerOpen ? 160 : 40} thickness={2} color={'#00790e'}
+          >
+            {drawerOpen ? (
+              <Box sx={{mt: -1, fontSize: 'large', color: 'white'}}>
+                Kalória<br/>
+                {`${globalContext.dailyProgress?.calorieSum ?? 0}/${globalContext.client?.targetCalories}kcal`}
+              </Box>
+            ) : <></>}
+
+          </NutrientsProgress>
+        </ListItem>
+      )}
+      {globalContext.client?.targetCarbohydrate && (
+        <ListItem sx={{justifyContent: 'center'}}>
+          <NutrientsProgress
+            target={globalContext.client?.targetCarbohydrate} current={globalContext.dailyProgress?.carbohydrateSum}
+            size={drawerOpen ? 160 : 40} thickness={2} color={'#ff8800'}
+          >
+            {drawerOpen ? (
+              <Box sx={{mt: -1, fontSize: 'large', color: 'white'}}>
+                Szénhidrát<br/>
+                {`${globalContext.dailyProgress?.carbohydrateSum ?? 0}/${globalContext.client?.targetCarbohydrate}g`}
+              </Box>
+            ) : <></>}
+
+          </NutrientsProgress>
+        </ListItem>
+      )}
+      {globalContext.client?.targetProtein && (
+        <ListItem sx={{justifyContent: 'center'}}>
+          <NutrientsProgress
+            target={globalContext.client?.targetProtein} current={globalContext.dailyProgress?.proteinSum}
+            size={drawerOpen ? 160 : 40} thickness={2} color={'#b34a02'}
+          >
+            {drawerOpen ? (
+            <Box sx={{mt: -1, fontSize: 'large', color: 'white'}}>
+              Fehérje<br/>
+              {`${globalContext.dailyProgress?.proteinSum ?? 0}/${globalContext.client?.targetProtein}g`}
+            </Box>
+
+            ) : <></>}
+          </NutrientsProgress>
+        </ListItem>
+      )}
+      {globalContext.client?.targetFat && (
+        <ListItem sx={{justifyContent: 'center'}}>
+          <NutrientsProgress
+            target={globalContext.client?.targetFat} current={globalContext.dailyProgress?.fatSum}
+            size={drawerOpen ? 160 : 40} thickness={2} color={'#ffc100'}
+          >
+            {drawerOpen ? (
+            <Box sx={{mt: -1, fontSize: 'large', color: 'white'}}>
+              Zsír<br/>
+              {`${globalContext.dailyProgress?.fatSum ?? 0}/${globalContext.client?.targetFat}g`}
+            </Box>
+
+            ) : <></>}
+          </NutrientsProgress>
+        </ListItem>
+      )}
+      {globalContext.client?.targetWater && (
+        <ListItem sx={{justifyContent: 'center'}}>
+          <WaterProgress
+            target={globalContext.client?.targetWater} current={globalContext.dailyProgress?.fatSum}
+            width={70}
+          >
+            {drawerOpen ? (
+              <>
+                Víz<br/>
+                {`${globalContext.dailyProgress?.waterSum ?? 0}/${globalContext.client?.targetWater}l`}
+              </>
+
+            ) : <></>}
+          </WaterProgress>
+        </ListItem>
+      )}
+    </>
+  );
+};
+
 export const NavList = (props: { drawerOpen: boolean }) => {
   const {drawerOpen} = props;
   const router = useRouter();
   const drawerContext = useContext(DrawerContext);
-  const [submenusOpenState, setSubmenusOpenState] = useState<boolean[]>(new Array(routes.length).fill(true));
+  const [quickProgressOpen, setQuickProgressOpen] = useState<boolean>(localStorage.getItem('quickProgressOpen') === 'true');
 
-  const handleClick = (position: number) => {
-    setSubmenusOpenState(prevState => prevState.map((item, index) => index === position ? !item : item));
+  const handleClick = () => {
+    setQuickProgressOpen(prevState => {
+      localStorage.setItem('quickProgressOpen', !prevState ? 'true' : 'false');
+      return !prevState;
+    });
   };
 
   return (
     <List sx={{padding: `0 0 ${drawerContext.headerHeight}px 0`}}>
-      {routes.map((route: CCRoute, index: number) => {
-        return !route.subRoutes ? (
-          <LinkItem key={route.label} route={route} routerPath={router.route} drawerOpen={drawerOpen}/>
-        ) : (
-          <Fragment key={route.label}>
-            <Tooltip title={drawerOpen ? '' : `${route.label} ${submenusOpenState[index] ? '\u25B2' : '\u25BC'}`}
-                     placement="right">
-              <ListItemButton onClick={() => handleClick(index)}>
-                <ListItemIcon>
-                  <Icon>{route.icon}</Icon>
-                </ListItemIcon>
-                <ListItemText primary={route.label}/>
-                {submenusOpenState[index] ? <ExpandLess/> : <ExpandMore/>}
-              </ListItemButton>
-            </Tooltip>
-            <Collapse in={submenusOpenState[index]} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                {route.subRoutes.map((subRoute) =>
-                  <LinkItem
-                    key={subRoute.label}
-                    route={subRoute}
-                    routerPath={router.route}
-                    subRoute
-                    drawerOpen={drawerOpen}/>)}
-              </List>
-            </Collapse>
-          </Fragment>
-        );
-      })}
+      {routes.map((route: CCRoute, index: number) =>
+          <LinkItem key={index} route={route} routerPath={router.route} drawerOpen={drawerOpen}/>
+      )}
+      {router.route !== '/daily-progress' && (
+        <>
+          <Tooltip title={drawerOpen ? '' : 'Gyorsmenü'} placement="right">
+            <ListItemButton onClick={() => handleClick()}>
+              <ListItemIcon>
+                <Icon>{quickProgressOpen ? 'expand_less' : 'expand_more'}</Icon>
+              </ListItemIcon>
+              <ListItemText primary={'Gyorsmenü'}/>
+            </ListItemButton>
+          </Tooltip>
+          <Collapse in={quickProgressOpen} timeout="auto" unmountOnExit>
+            <DailyProgress drawerOpen={drawerOpen}/>
+          </Collapse>
+        </>
+      )}
     </List>
   );
 };

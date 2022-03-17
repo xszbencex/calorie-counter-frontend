@@ -1,11 +1,10 @@
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useForm} from 'react-hook-form';
 import * as yup from 'yup';
-import {Button, Grid, InputAdornment} from '@mui/material';
+import {Button, Grid, InputAdornment, Typography} from '@mui/material';
 import {ClientDTO} from '../../types/dto/ClientDTO';
 import {BaseDTO} from '../../types/dto/BaseDTO';
 import {commonStrings} from '../../constants/common-values';
-import {FormProps} from '../../types/FormProps';
 import {CCFormText} from '../input-fields/CCText';
 import { CCFormSelect } from '../input-fields/CCSelect';
 import {genderOptions, physicalActivityOptions} from '../../constants/enum-label';
@@ -15,6 +14,8 @@ import {getDateSchema, getNumberSchema} from '../../constants/common-schema';
 import GlobalContext from '../../store/global-context';
 import moment from 'moment';
 import {calculateTargetCalories, getAgeByBirthDate} from '../../utils/common-functions';
+import DialogContext from '../../store/dialog-context';
+import {createClient, updateClient} from '../../utils/api/client-api';
 
 type FormData = Omit<ClientDTO, keyof BaseDTO | 'keycloakId'>
 
@@ -31,9 +32,9 @@ const schema = yup.object({
   physicalActivity: yup.string().required(commonStrings.required)
 });
 
-export const ClientForm = (props: FormProps) => {
-  const {onFormSubmit} = props;
+export const ClientForm = () => {
   const globalContext = useContext(GlobalContext);
+  const dialogContext = useContext(DialogContext);
 
   useEffect(() => {
     if (globalContext.client) {
@@ -44,11 +45,17 @@ export const ClientForm = (props: FormProps) => {
   const methods = useForm<FormData>({defaultValues: undefined, resolver: yupResolver(schema)});
   const {handleSubmit, control, reset, getValues, setValue} = methods;
 
-  const onSubmit = (formData: FormData) => {
-    if (onFormSubmit) {
-      onFormSubmit(formData);
+  function onSubmit(formData: FormData) {
+    if (globalContext.client) {
+      updateClient(formData as ClientDTO, globalContext.client.id)
+        .then(response => globalContext.setClient(response))
+        .catch(error => dialogContext.showRestCallErrorDialog(error));
+    } else {
+      createClient(formData as ClientDTO)
+        .then(response => globalContext.setClient(response))
+        .catch(error => dialogContext.showRestCallErrorDialog(error));
     }
-  };
+  }
 
   function calculate() {
     setValue('targetCalories', calculateTargetCalories(
@@ -63,8 +70,91 @@ export const ClientForm = (props: FormProps) => {
   return (
     <>
       <form id="client-form" onSubmit={handleSubmit(onSubmit)}>
-        <Grid container rowSpacing={2} columnSpacing={2} marginBottom="20px">
-          <Grid item xs={1}>
+        <Typography
+          variant={'h4'} color="primary" fontWeight="bold"
+          fontFamily="cursive" textAlign={'center'}
+          mb={3}
+        >
+          Napi célok
+        </Typography>
+        <Grid container rowSpacing={4} columnSpacing={4} marginBottom="20px" columns={10}>
+          <Grid item xs={2}>
+            <CCFormText
+              name="targetCalories"
+              control={control}
+              label="Kalória *"
+              textFieldProps={{
+                type: 'number',
+                InputProps: {
+                  endAdornment: <InputAdornment position="end">kcal</InputAdornment>,
+                }, variant: 'outlined', size: 'medium'
+              }}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <CCFormText
+              name="targetCarbohydrate"
+              control={control}
+              label="Szénhidrát"
+              textFieldProps={{
+                type: 'number',
+                InputProps: {
+                  endAdornment: <InputAdornment position="end">g</InputAdornment>,
+                }, variant: 'outlined', size: 'medium'
+              }}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <CCFormText
+              name="targetProtein"
+              control={control}
+              label="Fehérje"
+              textFieldProps={{
+                type: 'number',
+                InputProps: {
+                  endAdornment: <InputAdornment position="end">g</InputAdornment>,
+                }, variant: 'outlined', size: 'medium'
+              }}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <CCFormText
+              name="targetFat"
+              control={control}
+              label="Zsír"
+              textFieldProps={{
+                type: 'number',
+                InputProps: {
+                  endAdornment: <InputAdornment position="end">g</InputAdornment>,
+                }, variant: 'outlined', size: 'medium'
+              }}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <CCFormText
+              name="targetWater"
+              control={control}
+              label="Víz"
+              textFieldProps={{
+                type: 'number',
+                InputProps: {
+                  endAdornment: <InputAdornment position="end" disableTypography>l</InputAdornment>,
+                }, variant: 'outlined', size: 'medium'
+              }}
+            />
+          </Grid>
+        </Grid>
+        <Button type="submit" form="client-form">Napi célértékek mentése</Button>
+
+        <Typography
+          variant={'h4'} color="primary" fontWeight="bold"
+          fontFamily="cursive" textAlign={'center'}
+          mb={3} mt={6}
+        >
+          Személyes adatok
+        </Typography>
+        <Grid container rowSpacing={4} columnSpacing={4} marginBottom="20px">
+          <Grid item xs={4}>
             <CCFormText
               name="height"
               control={control}
@@ -73,11 +163,12 @@ export const ClientForm = (props: FormProps) => {
                 type: 'number',
                 InputProps: {
                   endAdornment: <InputAdornment position="end">cm</InputAdornment>,
-                }
+                },
+                variant: 'outlined', size: 'medium'
               }}
             />
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={4}>
             <CCFormText
               name="weight"
               control={control}
@@ -86,91 +177,43 @@ export const ClientForm = (props: FormProps) => {
                 type: 'number',
                 InputProps: {
                   endAdornment: <InputAdornment position="end">kg</InputAdornment>,
-                }
+                },
+                variant: 'outlined', size: 'medium'
               }}
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={4}>
             <CCFormDate
               name="birthDate" control={control} label="Születési dátum *"
               isBirthDatePicker datePickerProps={{maxDate: moment()}}
+              textFieldProps={{variant: 'outlined', size: 'medium'}}
             />
-          </Grid>
-          <Grid item xs={2}>
-            <CCFormSelect name="gender" control={control} label="Neme *" options={genderOptions}/>
           </Grid>
           <Grid item xs={4}>
-            <CCFormSelect name="physicalActivity" control={control} label="Fizikai aktivitás *" options={physicalActivityOptions}/>
-          </Grid>
-          <Grid item xs={2}>
-            <Button onClick={() => calculate()}>Szükséges kalória kiszámítása</Button>
-          </Grid>
-          <Grid item xs={1.5}>
-            <CCFormText
-              name="targetCalories"
-              control={control}
-              label="Napi cél kalória *"
-              textFieldProps={{
-                type: 'number',
-                InputProps: {
-                  endAdornment: <InputAdornment position="end">kcal</InputAdornment>,
-                }
-              }}
+            <CCFormSelect
+              name="gender" control={control} label="Neme *" options={genderOptions}
+              formControlProps={{variant: 'outlined', size: 'medium'}} selectProps={{variant: 'outlined'}}
             />
           </Grid>
-          <Grid item xs={1.5}>
-            <CCFormText
-              name="targetCarbohydrate"
-              control={control}
-              label="Napi cél szénhidrát"
-              textFieldProps={{
-                type: 'number',
-                InputProps: {
-                  endAdornment: <InputAdornment position="end">g</InputAdornment>,
-                }
-              }}
-            />
-          </Grid>
-          <Grid item xs={1.5}>
-            <CCFormText
-              name="targetProtein"
-              control={control}
-              label="Napi cél fehérje"
-              textFieldProps={{
-                type: 'number',
-                InputProps: {
-                  endAdornment: <InputAdornment position="end">g</InputAdornment>,
-                }
-              }}
-            />
-          </Grid>
-          <Grid item xs={1.5}>
-            <CCFormText
-              name="targetFat"
-              control={control}
-              label="Napi cél zsír"
-              textFieldProps={{
-                type: 'number',
-                InputProps: {
-                  endAdornment: <InputAdornment position="end">g</InputAdornment>,
-                }
-              }}
-            />
-          </Grid>
-          <Grid item xs={1.5}>
-            <CCFormText
-              name="targetWater"
-              control={control}
-              label="Napi cél víz"
-              textFieldProps={{
-                type: 'number',
-                InputProps: {
-                  endAdornment: <InputAdornment position="end" disableTypography>l</InputAdornment>,
-                }
-              }}
+          <Grid item xs={8}>
+            <CCFormSelect
+              name="physicalActivity" control={control} label="Fizikai aktivitás *"
+              options={physicalActivityOptions}
+              formControlProps={{variant: 'outlined', size: 'medium'}}
             />
           </Grid>
         </Grid>
+        <Typography
+          variant={'h4'} color="primary" fontWeight="bold"
+          fontFamily="cursive" textAlign={'center'}
+          mb={3} mt={6}
+        >
+          Ajánlott értékek
+        </Typography>
+        <Typography variant={'h6'} textAlign={'center'}>
+          Az ajánlott napi célértékek kiszámításához kérem adja meg a személyes adatokat.
+        </Typography>
+        <Button type="submit" form="client-form">Személyes adatok mentée</Button>
       </form>
     </>
   );
