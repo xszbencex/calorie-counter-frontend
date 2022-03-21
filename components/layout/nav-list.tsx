@@ -40,80 +40,100 @@ const DailyProgress = (props: {drawerOpen?: boolean }) => {
 
   return (
     <>
-      {globalContext.client?.targetCalories && (
+      {globalContext.dailyTarget?.targetCalories && (
         <ListItem sx={{justifyContent: 'center'}}>
           <NutrientsProgress
-            target={globalContext.client?.targetCalories} current={globalContext.dailyProgress?.calorieSum}
+            target={globalContext.dailyTarget?.targetCalories} current={globalContext.dailyProgress?.calorieSum}
             size={drawerOpen ? 160 : 40} thickness={2} color={'#00790e'}
           >
             {drawerOpen ? (
               <Box sx={{mt: -1, fontSize: 'large', color: 'white'}}>
                 Kalória<br/>
-                {`${globalContext.dailyProgress?.calorieSum ?? 0}/${globalContext.client?.targetCalories}kcal`}
+                {`${globalContext.dailyProgress?.calorieSum ?? 0}/${globalContext.dailyTarget?.targetCalories}kcal`}<br/>
+                {((globalContext.dailyProgress?.calorieSum ?? 0) / globalContext.dailyTarget?.targetCalories ?? 1) > 1.4 && (
+                  <Tooltip title={'Az napi érték jelentősen meghaladja a célértéket!'}>
+                    <Icon color={'error'} fontSize={'medium'}>info_outlined</Icon>
+                  </Tooltip>
+                )}
               </Box>
             ) : <></>}
 
           </NutrientsProgress>
         </ListItem>
       )}
-      {globalContext.client?.targetCarbohydrate && (
+      {globalContext.dailyTarget?.targetCarbohydrate && (
         <ListItem sx={{justifyContent: 'center'}}>
           <NutrientsProgress
-            target={globalContext.client?.targetCarbohydrate} current={globalContext.dailyProgress?.carbohydrateSum}
+            target={globalContext.dailyTarget?.targetCarbohydrate} current={globalContext.dailyProgress?.carbohydrateSum}
             size={drawerOpen ? 160 : 40} thickness={2} color={'#ff8800'}
           >
             {drawerOpen ? (
               <Box sx={{mt: -1, fontSize: 'large', color: 'white'}}>
                 Szénhidrát<br/>
-                {`${globalContext.dailyProgress?.carbohydrateSum ?? 0}/${globalContext.client?.targetCarbohydrate}g`}
+                {`${globalContext.dailyProgress?.carbohydrateSum ?? 0}/${globalContext.dailyTarget?.targetCarbohydrate}g`}<br/>
+                {((globalContext.dailyProgress?.carbohydrateSum ?? 0) / globalContext.dailyTarget?.targetCarbohydrate ?? 1) > 1.4 && (
+                  <Tooltip title={'Az napi érték jelentősen meghaladja a célértéket!'}>
+                    <Icon color={'error'} fontSize={'medium'}>info_outlined</Icon>
+                  </Tooltip>
+                )}
               </Box>
             ) : <></>}
 
           </NutrientsProgress>
         </ListItem>
       )}
-      {globalContext.client?.targetProtein && (
+      {globalContext.dailyTarget?.targetProtein && (
         <ListItem sx={{justifyContent: 'center'}}>
           <NutrientsProgress
-            target={globalContext.client?.targetProtein} current={globalContext.dailyProgress?.proteinSum}
+            target={globalContext.dailyTarget?.targetProtein} current={globalContext.dailyProgress?.proteinSum}
             size={drawerOpen ? 160 : 40} thickness={2} color={'#b34a02'}
           >
             {drawerOpen ? (
             <Box sx={{mt: -1, fontSize: 'large', color: 'white'}}>
               Fehérje<br/>
-              {`${globalContext.dailyProgress?.proteinSum ?? 0}/${globalContext.client?.targetProtein}g`}
+              {`${globalContext.dailyProgress?.proteinSum ?? 0}/${globalContext.dailyTarget?.targetProtein}g`}<br/>
+              {((globalContext.dailyProgress?.proteinSum ?? 0) / globalContext.dailyTarget?.targetProtein ?? 1) > 1.4 && (
+                <Tooltip title={'Az napi érték jelentősen meghaladja a célértéket!'}>
+                  <Icon color={'error'} fontSize={'medium'}>info_outlined</Icon>
+                </Tooltip>
+              )}
             </Box>
 
             ) : <></>}
           </NutrientsProgress>
         </ListItem>
       )}
-      {globalContext.client?.targetFat && (
+      {globalContext.dailyTarget?.targetFat && (
         <ListItem sx={{justifyContent: 'center'}}>
           <NutrientsProgress
-            target={globalContext.client?.targetFat} current={globalContext.dailyProgress?.fatSum}
+            target={globalContext.dailyTarget?.targetFat} current={globalContext.dailyProgress?.fatSum}
             size={drawerOpen ? 160 : 40} thickness={2} color={'#ffc100'}
           >
             {drawerOpen ? (
             <Box sx={{mt: -1, fontSize: 'large', color: 'white'}}>
               Zsír<br/>
-              {`${globalContext.dailyProgress?.fatSum ?? 0}/${globalContext.client?.targetFat}g`}
+              {`${globalContext.dailyProgress?.fatSum ?? 0}/${globalContext.dailyTarget?.targetFat}g`}<br/>
+              {((globalContext.dailyProgress?.fatSum ?? 0) / globalContext.dailyTarget?.targetFat ?? 1) > 1.4 && (
+                <Tooltip title={'Az napi érték jelentősen meghaladja a célértéket!'}>
+                  <Icon color={'error'} fontSize={'medium'}>info_outlined</Icon>
+                </Tooltip>
+              )}
             </Box>
 
             ) : <></>}
           </NutrientsProgress>
         </ListItem>
       )}
-      {globalContext.client?.targetWater && (
+      {globalContext.dailyTarget?.targetWater && (
         <ListItem sx={{justifyContent: 'center'}}>
           <WaterProgress
-            target={globalContext.client?.targetWater} current={globalContext.dailyProgress?.fatSum}
+            target={globalContext.dailyTarget?.targetWater} current={globalContext.dailyProgress?.waterSum}
             width={70}
           >
             {drawerOpen ? (
               <>
                 Víz<br/>
-                {`${globalContext.dailyProgress?.waterSum ?? 0}/${globalContext.client?.targetWater}l`}
+                {`${globalContext.dailyProgress?.waterSum ?? 0}/${globalContext.dailyTarget?.targetWater}l`}
               </>
 
             ) : <></>}

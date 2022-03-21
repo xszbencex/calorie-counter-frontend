@@ -9,7 +9,7 @@ export default function StatisticsPage() {
       <Head>
         <title>Kalóriaszámláló - Kimutatások</title>
       </Head>
-      <h1 style={{textAlign: 'center', fontFamily: 'cursive', color: primaryColor}}>Súly változás</h1>
+      <h1 style={{textAlign: 'center', fontFamily: 'cursive', color: primaryColor}}>Súlyváltozás</h1>
       <WeighChangeChart/>
       <h1 style={{textAlign: 'center', fontFamily: 'cursive', marginTop: 40, color: primaryColor}}>Havi kimutatások</h1>
       <MonthlyReviewChart/>

@@ -1,7 +1,7 @@
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useForm} from 'react-hook-form';
 import * as yup from 'yup';
-import {Avatar, Button, Grid, InputAdornment, ListItem, ListItemAvatar} from '@mui/material';
+import {Avatar, Grid, InputAdornment, ListItem, ListItemAvatar} from '@mui/material';
 import {BaseDTO} from '../../types/dto/BaseDTO';
 import {commonStrings} from '../../constants/common-values';
 import {FormProps} from '../../types/FormProps';
@@ -14,13 +14,12 @@ import {getAllProductByUserId} from '../../utils/api/product-api';
 import GlobalContext from '../../store/global-context';
 import {productTypeOptions, unitOfMeasureOptions} from '../../constants/enum-label';
 import {UnitOfMeasure} from '../../types/enum/UnitOfMeasure';
-import {CCFormDate} from '../input-fields/CCDate';
 import {getDateSchema, getNumberSchema} from '../../constants/common-schema';
 import moment from 'moment';
 import DialogContext from '../../store/dialog-context';
 import {CCFormDateTime} from '../input-fields/CCDateTime';
 
-type FormData = Omit<IntakeDTO, keyof BaseDTO>
+type FormData = Omit<IntakeDTO, keyof BaseDTO | 'userId'>
 
 const defaultFormValues = {
   intakeDate: new Date()

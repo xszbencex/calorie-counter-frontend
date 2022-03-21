@@ -25,7 +25,7 @@ export function CCSpeedDial() {
     {tooltip: 'Termék felvétele', icon: <Icon>add_shopping_cart</Icon>, onClick: openProductDialog},
     {tooltip: 'Étekezés hozzáadása', icon: <Icon>local_dining</Icon>, onClick: openNutrientIntakeDialog},
     {tooltip: 'Ivás hozzáadása', icon: <Icon>bloodtype</Icon>, onClick: openWaterIntakeDialog},
-    {tooltip: 'Súly változás naplózása', icon: <Icon>fitness_center</Icon>, onClick: openWeightChangeDialog},
+    {tooltip: 'Súlyváltozás naplózása', icon: <Icon>fitness_center</Icon>, onClick: openWeightChangeDialog},
   ];
 
   const globalContext = useContext(GlobalContext);
@@ -83,7 +83,7 @@ export function CCSpeedDial() {
 
   function openWeightChangeDialog() {
     dialogContext.openFormDialog({
-      title: 'Súly változás naplózása',
+      title: 'Súlyváltozás naplózása',
       formName: 'weight-change-form',
       formComponent: <WeightChangeForm onFormSubmit={formData => onWeightChangeSubmit(formData)}/>,
       dialogProps: {maxWidth: 'xs'}

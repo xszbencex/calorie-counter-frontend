@@ -1,6 +1,6 @@
 import {KeycloakInstance, KeycloakTokenParsed} from 'keycloak-js';
 
-export type CCKecyloakInstance = KeycloakInstance & {
+export type CCKeycloakInstance = KeycloakInstance & {
   tokenParsed: KeycloakTokenParsed & {
     email?: string
     given_name?: string

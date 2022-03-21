@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import {useContext, useEffect, useState} from 'react';
 import GlobalContext from '../store/global-context';
-import {Box, Grid} from '@mui/material';
+import {Box, Grid, Icon, Tooltip} from '@mui/material';
 import {NutrientsProgress} from '../components/NutrientsProgress';
 import {WaterProgress} from '../components/WaterProgress';
 import {IntakeDTO} from '../types/dto/IntakeDTO';
@@ -42,104 +42,140 @@ export default function DailyProgressPage() {
       <Head>
         <title>Kalóriaszámláló - Mai haladás</title>
       </Head>
-      <Grid container columnSpacing={2}>
-        <Grid item sm={12} lg={globalContext.client?.targetWater ? 9 : 12}>
+      <Grid container columnSpacing={2} rowSpacing={6} mt={4}>
+        <Grid item sm={12} xl={globalContext.dailyTarget?.targetWater ? 9 : 12}>
           <Grid container columnSpacing={2} rowSpacing={3}>
-            {globalContext.client?.targetCalories && (
+            {globalContext.dailyTarget?.targetCalories && (
               <Grid item xl={3} md={6} xs={12} className="center">
                 <NutrientsProgress
-                  target={globalContext.client?.targetCalories} current={globalContext.dailyProgress?.calorieSum}
+                  target={globalContext.dailyTarget?.targetCalories} current={globalContext.dailyProgress?.calorieSum}
                   color={'#00790e'}
                 >
-                  <Box sx={{mt: -1}}>
+                  <Box sx={{mt: -1, fontFamily: 'cursive', color: 'black'}}>
                     Kalória<br/>
-                    {`${globalContext.dailyProgress?.calorieSum ?? 0}/${globalContext.client?.targetCalories}kcal`}
+                    {`${globalContext.dailyProgress?.calorieSum ?? 0}/${globalContext.dailyTarget?.targetCalories}kcal`}<br/>
+                    {((globalContext.dailyProgress?.calorieSum ?? 0) / globalContext.dailyTarget?.targetCalories ?? 1) > 1.4 && (
+                      <Tooltip title={'Az napi érték jelentősen meghaladja a célértéket!'}>
+                        <Icon color={'error'} fontSize={'large'}>info_outlined</Icon>
+                      </Tooltip>
+                    )}
                   </Box>
                 </NutrientsProgress>
               </Grid>
             )}
-            {globalContext.client?.targetCarbohydrate && (
+            {globalContext.dailyTarget?.targetCarbohydrate && (
               <Grid item xl={3} md={6} xs={12} className="center">
                 <NutrientsProgress
-                  target={globalContext.client?.targetCarbohydrate} current={globalContext.dailyProgress?.carbohydrateSum}
+                  target={globalContext.dailyTarget?.targetCarbohydrate} current={globalContext.dailyProgress?.carbohydrateSum}
                   color={'#ff8800'}
                 >
-                  <Box sx={{mt: -1}}>
+                  <Box sx={{mt: -1, fontFamily: 'cursive', color: 'black'}}>
                     Szénhidrát<br/>
-                    {`${globalContext.dailyProgress?.carbohydrateSum ?? 0}/${globalContext.client?.targetCarbohydrate}g`}
+                    {`${globalContext.dailyProgress?.carbohydrateSum ?? 0}/${globalContext.dailyTarget?.targetCarbohydrate}g`}<br/>
+                    {((globalContext.dailyProgress?.carbohydrateSum ?? 0) / globalContext.dailyTarget?.targetCarbohydrate ?? 1) > 1.4 && (
+                      <Tooltip title={'Az napi érték jelentősen meghaladja a célértéket!'}>
+                        <Icon color={'error'} fontSize={'large'}>info_outlined</Icon>
+                      </Tooltip>
+                    )}
                   </Box>
                 </NutrientsProgress>
               </Grid>
             )}
-            {globalContext.client?.targetProtein && (
+            {globalContext.dailyTarget?.targetProtein && (
               <Grid item xl={3} md={6} xs={12} className="center">
                 <NutrientsProgress
-                  target={globalContext.client?.targetProtein} current={globalContext.dailyProgress?.proteinSum}
+                  target={globalContext.dailyTarget?.targetProtein} current={globalContext.dailyProgress?.proteinSum}
                   color={'#b34a02'}
                 >
-                  <Box sx={{mt: -1}}>
+                  <Box sx={{mt: -1, fontFamily: 'cursive', color: 'black'}}>
                     Fehérje<br/>
-                    {`${globalContext.dailyProgress?.proteinSum ?? 0}/${globalContext.client?.targetProtein}g`}
+                    {`${globalContext.dailyProgress?.proteinSum ?? 0}/${globalContext.dailyTarget?.targetProtein}g`}<br/>
+                    {((globalContext.dailyProgress?.proteinSum ?? 0) / globalContext.dailyTarget?.targetProtein ?? 1) > 1.4 && (
+                      <Tooltip title={'Az napi érték jelentősen meghaladja a célértéket!'}>
+                        <Icon color={'error'} fontSize={'large'}>info_outlined</Icon>
+                      </Tooltip>
+                    )}
                   </Box>
                 </NutrientsProgress>
               </Grid>
             )}
-            {globalContext.client?.targetFat && (
+            {globalContext.dailyTarget?.targetFat && (
               <Grid item xl={3} md={6} xs={12} className="center">
                 <NutrientsProgress
-                  target={globalContext.client?.targetFat} current={globalContext.dailyProgress?.fatSum}
+                  target={globalContext.dailyTarget?.targetFat} current={globalContext.dailyProgress?.fatSum}
                   color={'#ffc100'}
                 >
-                  <Box sx={{mt: -1}}>
+                  <Box sx={{mt: -1, fontFamily: 'cursive', color: 'black'}}>
                     Zsír<br/>
-                    {`${globalContext.dailyProgress?.fatSum ?? 0}/${globalContext.client?.targetFat}g`}
+                    {`${globalContext.dailyProgress?.fatSum ?? 0}/${globalContext.dailyTarget?.targetFat}g`}<br/>
+                    {((globalContext.dailyProgress?.fatSum ?? 0) / globalContext.dailyTarget?.targetFat ?? 1) > 1.4 && (
+                      <Tooltip title={'Az napi érték jelentősen meghaladja a célértéket!'}>
+                        <Icon color={'error'} fontSize={'large'}>info_outlined</Icon>
+                      </Tooltip>
+                    )}
                   </Box>
                 </NutrientsProgress>
               </Grid>
             )}
           </Grid>
-          <h1 style={{fontFamily: 'cursive', textAlign: 'center'}}>Napi tápanyag tételek</h1>
+          <h1 style={{fontFamily: 'cursive', textAlign: 'center', marginTop: 40}}>Napi tápanyagbevitelek</h1>
           <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            {dailyNutrientIntakes?.map((intake, index) => (
-              <div key={index} style={{...listStyle, backgroundColor: primaryColor, maxWidth: 600}}>
-                <div style={{borderRight: 'black solid 1px', paddingRight: 7, marginRight: 7}}>
-                  {new Date(intake.intakeDate).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}
-                </div>
-                <div style={{width: '100%', textAlign: 'center'}}>
-                  {` ${intake.product
-                    ? `${intake.quantity} ${unitOfMeasureOptions.find(value => value.value === intake.product.unitOfMeasure)?.unit} ` +
-                    intake.product.name
-                    : 'Egyéb'} `}
-                  ({intake.calorie}/{intake.carbohydrate}/{intake.protein}/{intake.fat})
-                </div>
+            {dailyNutrientIntakes?.length === 0 ? (
+              <div style={{...listStyle, backgroundColor: primaryColor, maxWidth: 600}}>
+                <h3 style={{textAlign: 'center', width: '100%', margin: 0}}>Még nincs mai tápanyagbevitel rögzítve.</h3>
               </div>
-            ))}
+            ) : (
+              <>
+                {dailyNutrientIntakes?.map((intake, index) => (
+                  <div key={index} style={{...listStyle, backgroundColor: primaryColor, maxWidth: 600}}>
+                    <div style={{borderRight: 'black solid 1px', paddingRight: 7, marginRight: 7}}>
+                      {new Date(intake.intakeDate).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}
+                    </div>
+                    <div style={{width: '100%', textAlign: 'center'}}>
+                      {` ${intake.product
+                        ? `${intake.quantity} ${unitOfMeasureOptions.find(value => value.value === intake.product.unitOfMeasure)?.unit} ` +
+                        intake.product.name
+                        : 'Egyéb'} `}
+                      ({intake.calorie}/{intake.carbohydrate}/{intake.protein}/{intake.fat})
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         </Grid>
-        {globalContext.client?.targetWater && (
-          <Grid item sm={12} lg={3}>
-            {globalContext.client?.targetWater && (
+        {globalContext.dailyTarget?.targetWater && (
+          <Grid item sm={12} xl={3}>
+            {globalContext.dailyTarget?.targetWater && (
               <div className="center">
-                <WaterProgress target={globalContext.client?.targetWater} current={globalContext.dailyProgress?.waterSum}>
+                <WaterProgress target={globalContext.dailyTarget?.targetWater} current={globalContext.dailyProgress?.waterSum}>
                   <>
                     Víz<br/>
-                    {`${globalContext.dailyProgress?.waterSum ?? 0}/${globalContext.client?.targetWater}l`}
+                    {`${globalContext.dailyProgress?.waterSum ?? 0}/${globalContext.dailyTarget?.targetWater}l`}
                   </>
                 </WaterProgress>
               </div>
             )}
-            <h1 style={{fontFamily: 'cursive', textAlign: 'center'}}>Napi folyadék tételek</h1>
+            <h1 style={{fontFamily: 'cursive', textAlign: 'center', marginTop: 50}}>Napi folyadékbevitelek</h1>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-              {dailyWaterIntakes?.map((intake, index) => (
-                <div key={index} style={{...listStyle, backgroundColor: '#029ffa', maxWidth: 300}}>
-                  <div style={{borderRight: 'black solid 1px', paddingRight: 7, marginRight: 7}}>
-                    {new Date(intake.intakeDate).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}
-                  </div>
-                  <div style={{textAlign: 'center', width: '100%'}}>
-                    {intake.quantity} ml
-                  </div>
+              {dailyWaterIntakes?.length === 0 ? (
+                <div style={{...listStyle, backgroundColor: '#029ffa', maxWidth: 300}}>
+                  <h3 style={{textAlign: 'center'}}>Még nincs mai víz fogyasztás rögzítve.</h3>
                 </div>
-              ))}
+              ) : (
+                <>
+                  {dailyWaterIntakes?.map((intake, index) => (
+                    <div key={index} style={{...listStyle, backgroundColor: '#029ffa', maxWidth: 300}}>
+                      <div style={{borderRight: 'black solid 1px', paddingRight: 7, marginRight: 7}}>
+                        {new Date(intake.intakeDate).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}
+                      </div>
+                      <div style={{textAlign: 'center', width: '100%'}}>
+                        {intake.quantity} ml
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           </Grid>
         )}

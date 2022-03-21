@@ -183,7 +183,7 @@ export default function IntakePage() {
   return (
     <div>
       <Head>
-        <title>Kalóriaszámláló - Étkezés</title>
+        <title>Kalóriaszámláló - Étkezések/Ivások</title>
       </Head>
       <div className="actions">
         <Button startIcon={<Icon>add</Icon>} onClick={() => openNutrientIntakeDialog()}>

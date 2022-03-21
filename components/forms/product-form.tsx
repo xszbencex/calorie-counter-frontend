@@ -14,7 +14,7 @@ import {getNumberSchema} from '../../constants/common-schema';
 import {UnitOfMeasure} from '../../types/enum/UnitOfMeasure';
 import {ProductType} from '../../types/enum/ProductType';
 
-type FormData = Omit<ProductDTO, keyof BaseDTO>
+type FormData = Omit<ProductDTO, keyof BaseDTO | 'userId'>
 
 const macroSchema = yup.number()
   .min(0, commonStrings.positiveError)

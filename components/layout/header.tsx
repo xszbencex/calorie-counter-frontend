@@ -5,12 +5,12 @@ import {Button, Icon} from '@mui/material';
 import React, {useContext, useEffect, useRef} from 'react';
 import DrawerContext from '../../store/drawer-context';
 import {useKeycloak} from '@react-keycloak/ssr';
-import {CCKecyloakInstance} from '../../types/CCKecyloakInstance';
+import {CCKeycloakInstance} from '../../types/CCKeycloakInstance';
 import {primaryColor} from '../../constants/stlyes';
 
 export const Header = () => {
   const drawerContext = useContext(DrawerContext);
-  const {keycloak} = useKeycloak<CCKecyloakInstance>();
+  const {keycloak} = useKeycloak<CCKeycloakInstance>();
   const headerRef = useRef<HTMLDivElement>(null);
 
   const logout = () => {
@@ -18,11 +18,11 @@ export const Header = () => {
   };
 
   const login = () => {
-    keycloak?.login({redirectUri: `${location.origin}/home`});
+    keycloak?.login({redirectUri: `${location.origin}/daily-progress`});
   };
 
   const register = () => {
-    keycloak?.register({redirectUri: `${location.origin}/home`});
+    keycloak?.register({redirectUri: `${location.origin}/daily-progress`});
   };
 
   useEffect(() => {

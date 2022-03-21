@@ -4,11 +4,11 @@ import styles from '../../styles/layout.module.css';
 import Sidebar from './sidebar';
 import {DrawerContextProvider} from '../../store/drawer-context';
 import {useKeycloak} from '@react-keycloak/ssr';
-import {CCKecyloakInstance} from '../../types/CCKecyloakInstance';
+import {CCKeycloakInstance} from '../../types/CCKeycloakInstance';
 import {CCSpeedDial} from '../CCSpeedDial';
 
 export const Layout = (props: { children: ReactElement }) => {
-  const {keycloak} = useKeycloak<CCKecyloakInstance>();
+  const {keycloak} = useKeycloak<CCKeycloakInstance>();
 
   return (
     <div className={styles.pageContainer}>

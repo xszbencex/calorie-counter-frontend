@@ -8,7 +8,7 @@ export default function ProductsPage() {
   return (
     <div>
       <Head>
-        <title>Kalóriaszámláló - Termékek</title>
+        <title>Kalóriaszámláló - Ételek/Italok</title>
       </Head>
       <Grid container columnSpacing={{sm: 4, md: 12, lg: 6, xl: 12}} rowSpacing={5}>
         {productTypeOptions.map((productType, index) => (

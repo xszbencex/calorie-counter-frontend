@@ -35,7 +35,7 @@ export function WeightChangeDialog({weightChange, onClose}: WeightChangeDialogPr
     <Dialog open={Boolean(weightChange)} onClose={() => onClose('cancel')} maxWidth={'xs'} fullWidth>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle>
-          Súly változás törlése/módosítása
+          Súlyváltozás törlése/módosítása
           <IconButton onClick={() => onClose('cancel')} sx={{position: 'absolute', right: 12, top: 12}}>
             <Icon>close</Icon>
           </IconButton>

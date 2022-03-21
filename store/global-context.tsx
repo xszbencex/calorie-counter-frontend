@@ -1,23 +1,23 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
-import {ClientDTO} from '../types/dto/ClientDTO';
+import {DailyTargetDTO} from '../types/dto/DailyTargetDTO';
 import {useKeycloak} from '@react-keycloak/ssr';
 import {KeycloakInstance} from 'keycloak-js';
-import {getClientByUserId} from '../utils/api/client-api';
 import {useRouter} from 'next/router';
 import DialogContext from './dialog-context';
 import {IntakeSumResponse} from '../types/response/IntakeSumResponse';
 import {getIntakeSumByDate} from '../utils/api/intake-api';
+import {getDailyTargetByUserId} from '../utils/api/daily-target-api';
 
 type GlobalContextType = {
-  setClient: (client: ClientDTO) => void
-  client?: ClientDTO,
+  setDailyTarget: (client: DailyTargetDTO) => void
+  dailyTarget?: DailyTargetDTO,
   loggedInUserId?: string,
   refreshDailyProgress: () => void,
   dailyProgress?: IntakeSumResponse
 }
 
 const GlobalContext = createContext<GlobalContextType>({
-  setClient: (client: ClientDTO) => {},
+  setDailyTarget: (client: DailyTargetDTO) => {},
   refreshDailyProgress: () => {}
 });
 
@@ -25,15 +25,15 @@ export function GlobalContextProvider(props: { children: ReactNode }) {
   const {keycloak} = useKeycloak<KeycloakInstance>();
   const dialogContext = useContext(DialogContext);
   const router = useRouter();
-  const [client, setClient] = useState<ClientDTO>();
+  const [dailyTarget, setDailyTarget] = useState<DailyTargetDTO>();
   const [loggedInUserId, setLoggedInUserId] = useState<string>('');
   const [dailyProgress, setDailyProgress] = useState<IntakeSumResponse>();
 
   useEffect(() => {
     if (keycloak?.authenticated) {
       setLoggedInUserId(keycloak?.subject!);
-      getClientByUserId(keycloak?.subject!)
-        .then(response => setClient(response))
+      getDailyTargetByUserId(keycloak?.subject!)
+        .then(response => setDailyTarget(response))
         .catch(error => {
           error.code === '201' ? router.push('/profile') : dialogContext.showRestCallErrorDialog(error);
         });
@@ -48,8 +48,8 @@ export function GlobalContextProvider(props: { children: ReactNode }) {
   }
 
   const context = {
-    setClient,
-    client,
+    setDailyTarget: setDailyTarget,
+    dailyTarget,
     loggedInUserId,
     refreshDailyProgress,
     dailyProgress
