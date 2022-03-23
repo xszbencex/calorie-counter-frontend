@@ -115,8 +115,7 @@ export const PersonalDataForm = (props: {setTargetValue: UseFormSetValue<any>}) 
 
   function calculateCalories() {
     const BMR = 10 * watchWeight + 6.25 * watchHeight - 5 * getAgeByBirthDate(watchBirthDate) + (watchGender === Gender.MALE ? 5 : -161);
-    return BMR * physicalActivityOptions.find(value => value.value === watchPhysicalActivity)?.multiplier!;
-    // fehérje és szénhidrát: 4 kcal, zsír: 9, 20-20-60 pl
+    return Math.round(BMR * physicalActivityOptions.find(value => value.value === watchPhysicalActivity)?.multiplier!);
   }
 
   function calculateWater(calorie: number) {
